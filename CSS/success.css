@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'GmarketSansTTFBold' ;
+    src: url('CIPCHECKER/Font/GmarketSansTTFBold.worff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+.Success {
+    font-family: 'GmarketSansTTFBold', sans-serif;
+    font-size: 82.86px;
+    font-weight: bold;
+    color: black;
+}
