@@ -13,7 +13,7 @@
         <a>
             <button class="toggle-btn" style="background-color: rgba(240, 248, 255, 0); border: 0px rgb(255, 255, 255) solid;" onclick="toggleImage(1)">
                 <div style="position: relative; display: inline-block; width: 600px; height: 100px;">
-                    <img id="toggleImg1" src="/Image/On.png" alt="CIP 1차" style="width: 100%; height: 100%; border-radius: 5px;">
+                    <img id="toggleImg1" src="../Image/On.png" alt="CIP 1차" style="width: 100%; height: 100%; border-radius: 5px;">
                     <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #6c6c6c; font-size: 20px; font-weight: bold;">
                         CIP 1차
                     </span>
@@ -24,7 +24,7 @@
         <a>
             <button class="toggle-btn" style="background-color: rgba(240, 248, 255, 0); border: 0px rgb(255, 255, 255) solid;" onclick="toggleImage(2)">
                 <div style="position: relative; display: inline-block; width: 600px; height: 100px;">
-                    <img id="toggleImg2" src="/Image/On.png" alt="CIP 2차" style="width: 100%; height: 100%; border-radius: 5px;;">
+                    <img id="toggleImg2" src="../Image/On.png" alt="CIP 2차" style="width: 100%; height: 100%; border-radius: 5px;;">
                     <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #6c6c6c; font-size: 20px; font-weight: bold;">
                         CIP 2차
                     </span>
@@ -35,7 +35,7 @@
         <a>
             <button class="toggle-btn" style="background-color: rgba(240, 248, 255, 0); border: 0px rgb(255, 255, 255) solid;" onclick="toggleImage(3)">
                 <div style="position: relative; display: inline-block; width: 600px; height: 100px;">
-                    <img id="toggleImg3" src="/Image/On.png" alt="CIP 3차" style="width: 100%; height: 100%; border-radius: 5px;">
+                    <img id="toggleImg3" src="../Image/On.png" alt="CIP 3차" style="width: 100%; height: 100%; border-radius: 5px;">
                     <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #6c6c6c; font-size: 20px; font-weight: bold;">
                         CIP 3차
                     </span>
@@ -46,7 +46,7 @@
         <a href="../Success.html">
             <button style="background-color: rgba(255, 255, 255, 0); border: 0px;">
                 <div>
-                    <img id="componentImg" src="/Image/Component 2.png" style="box-shadow: 10px;">
+                    <img id="componentImg" src="../Image/Component 2.png" style="box-shadow: 10px;">
                 </div>
             </button>
         </a>
@@ -55,9 +55,9 @@
             function toggleImage(num) {
                 var img = document.getElementById("toggleImg" + num);
                 if (img.src.includes("On.png")) {
-                    img.src = "/Image/Off.png";  // 해당 이미지 변경 (Off 이미지로)
+                    img.src = "../Image/Off.png";  // 해당 이미지 변경 (Off 이미지로)
                 } else {
-                    img.src = "/Image/On.png";   // 해당 이미지 변경 (On 이미지로)
+                    img.src = "../Image/On.png";   // 해당 이미지 변경 (On 이미지로)
                 }
                 
                 // 이미지 상태를 확인하고 Component 2 이미지를 변경
@@ -72,9 +72,9 @@
                 
                 // 아무것도 Off 상태가 아니면 Component 2 이미지
                 if (!img1.includes("Off.png") && !img2.includes("Off.png") && !img3.includes("Off.png")) {
-                    document.getElementById("componentImg").src = "/Image/Component 2.png"; // 원래 이미지로 복원
+                    document.getElementById("componentImg").src = "../Image/Component 2.png"; // 원래 이미지로 복원
                 } else {
-                    document.getElementById("componentImg").src = "/Image/CP2x.png"; // 하나라도 Off 상태이면 CP2 이미지로 변경
+                    document.getElementById("componentImg").src = "../Image/CP2x.png"; // 하나라도 Off 상태이면 CP2 이미지로 변경
                 }
             }
         </script>
