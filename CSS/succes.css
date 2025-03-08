@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'GmarketSansTTFBold' ;
-    src: url('CIPCHECKER/Font/GmarketSansTTFBold.worff') format('woff');
+    src: url('../Font/GmarketSansTTFBold.woff') format('woff');
     font-weight: bold;
     font-style: normal;
 }
