@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <script type="module" src="../static/firebase_config.js"></script>
+    <script type="module" src="../static/login/login.js"></script>
+</head>
+<body>
+    <div class="login-container">
+        <h2>로그인</h2>
+        <input type="text" id="studentId" placeholder="학교 이메일 입력">
+        <input type="password" id="password" placeholder="비밀번호 입력">
+        <button onclick="login()">로그인</button>
+        <p id="error-message" class="error"></p>
+    </div>
+</body>
+</html>
