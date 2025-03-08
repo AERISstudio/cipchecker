@@ -5,18 +5,79 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>시간 선택</title>
-    <link rel="stylesheet" href="CSS\cip.css">
+    <link rel="stylesheet" href="..\CSS\cip.css">
 </head>
 <body>
-    <h1>CIP 선택</h1>
-    <br>
-    <button class="toggle-btn" onclick="toggleBackground()">CIP 1차</button>
-    <br>
-    <button class="toggle-btn" onclick="toggleBackground()">CIP 2차</button>
-    <br>
-    <button class="toggle-btn" onclick="toggleBackground()">CIP 3차</button>
-    <br>
-    <button>선택해주세요</button>
+    <div style="text-align: center; position: relative; color: black; font-size: 73.16px; font-family: 'GmarketSansTTFBold'; font-weight: 500; word-wrap: break-word">학습실 3</div>
+    <div style="display: flex; justify-content: center; align-items: center; height: 100%; flex-direction: column; text-align: center;">
+        <a>
+            <button class="toggle-btn" style="background-color: rgba(240, 248, 255, 0); border: 0px rgb(255, 255, 255) solid;" onclick="toggleImage(1)">
+                <div style="position: relative; display: inline-block; width: 600px; height: 100px;">
+                    <img id="toggleImg1" src="/Image/On.png" alt="CIP 1차" style="width: 100%; height: 100%; border-radius: 5px;">
+                    <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #6c6c6c; font-size: 20px; font-weight: bold;">
+                        CIP 1차
+                    </span>
+                </div>
+            </button>
+        </a>
+        <br>
+        <a>
+            <button class="toggle-btn" style="background-color: rgba(240, 248, 255, 0); border: 0px rgb(255, 255, 255) solid;" onclick="toggleImage(2)">
+                <div style="position: relative; display: inline-block; width: 600px; height: 100px;">
+                    <img id="toggleImg2" src="/Image/On.png" alt="CIP 2차" style="width: 100%; height: 100%; border-radius: 5px;;">
+                    <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #6c6c6c; font-size: 20px; font-weight: bold;">
+                        CIP 2차
+                    </span>
+                </div>
+            </button>
+        </a>
+        <br>
+        <a>
+            <button class="toggle-btn" style="background-color: rgba(240, 248, 255, 0); border: 0px rgb(255, 255, 255) solid;" onclick="toggleImage(3)">
+                <div style="position: relative; display: inline-block; width: 600px; height: 100px;">
+                    <img id="toggleImg3" src="/Image/On.png" alt="CIP 3차" style="width: 100%; height: 100%; border-radius: 5px;">
+                    <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #6c6c6c; font-size: 20px; font-weight: bold;">
+                        CIP 3차
+                    </span>
+                </div>
+            </button>
+        </a>
+        <br>
+        <a href="../Success.html">
+            <button style="background-color: rgba(255, 255, 255, 0); border: 0px;">
+                <div>
+                    <img id="componentImg" src="/Image/Component 2.png" style="box-shadow: 10px;">
+                </div>
+            </button>
+        </a>
+        
+        <script>
+            function toggleImage(num) {
+                var img = document.getElementById("toggleImg" + num);
+                if (img.src.includes("On.png")) {
+                    img.src = "/Image/Off.png";  // 해당 이미지 변경 (Off 이미지로)
+                } else {
+                    img.src = "/Image/On.png";   // 해당 이미지 변경 (On 이미지로)
+                }
+                
+                // 이미지 상태를 확인하고 Component 2 이미지를 변경
+                checkCIPStatus();
+            }
 
+            function checkCIPStatus() {
+                // 각 CIP 이미지 상태 확인
+                var img1 = document.getElementById("toggleImg1").src;
+                var img2 = document.getElementById("toggleImg2").src;
+                var img3 = document.getElementById("toggleImg3").src;
+                
+                // 아무것도 Off 상태가 아니면 Component 2 이미지
+                if (!img1.includes("Off.png") && !img2.includes("Off.png") && !img3.includes("Off.png")) {
+                    document.getElementById("componentImg").src = "/Image/Component 2.png"; // 원래 이미지로 복원
+                } else {
+                    document.getElementById("componentImg").src = "/Image/CP2x.png"; // 하나라도 Off 상태이면 CP2 이미지로 변경
+                }
+            }
+        </script>
+    </div>
 </body>
 </html>
