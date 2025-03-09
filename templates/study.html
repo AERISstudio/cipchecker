@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>자습실 선택</title>
+</head>
+<body>
+    <h2>CIP 선택</h2>
+    <label><input type="checkbox" id="cip1" checked> CIP1</label>
+    <label><input type="checkbox" id="cip2"> CIP2</label>
+    <label><input type="checkbox" id="cip3"> CIP3</label>
+    <button onclick="submitChoice('자습실')">저장</button>
+
+    <script>
+        function submitChoice(choice) {
+            const cip1 = document.getElementById("cip1").checked ? choice : "자습";
+            const cip2 = document.getElementById("cip2").checked ? choice : "자습";
+            const cip3 = document.getElementById("cip3").checked ? choice : "자습";
+
+            fetch("/update_excel", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ cip1, cip2, cip3 })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error("❌ 요청 실패:", error);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,24 +1,29 @@
-import { auth } from "../firebase_config.js";
-import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+import { getAuth, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+import { auth } from "../static/firebase_config.js";
 
 function login() {
     let studentId = document.getElementById("studentId").value.trim();
-    let password = document.getElementById("password").value.trim();
 
-    let email = studentId;  
-
-    console.log("🟢 변환된 이메일:", email);
-
-    // Firebase 로그인 요청
-    signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            console.log("로그인 성공:", userCredential.user);
-            window.location.href = "../main.html";  
-        })
-        .catch((error) => {
-            console.error("로그인 실패:", error.message);
-            document.getElementById("error-message").innerText = "로그인 실패: " + error.message;
-        });
+    fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ student_id: studentId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.token) {
+            signInWithCustomToken(auth, data.token)
+                .then(() => {
+                    console.log(" 로그인 성공:", studentId);
+                    window.location.href = "/selection";
+                })
+                .catch(error => {
+                    console.error(" Firebase 로그인 실패:", error.message);
+                });
+        } else {
+            console.error(" 서버 응답 오류:", data.error);
+        }
+    });
 }
 
 window.login = login;
