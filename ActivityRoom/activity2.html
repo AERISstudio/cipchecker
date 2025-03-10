@@ -43,7 +43,7 @@
             </button>
         </a>
         <br>
-        <a href="../Success.html">
+        <a href="addfriendac2.html">
             <button style="background-color: rgba(255, 255, 255, 0); border: 0px;">
                 <div>
                     <img id="componentImg" src="../Image/Component 2.png" style="box-shadow: 10px;">
@@ -55,9 +55,9 @@
             function toggleImage(num) {
                 var img = document.getElementById("toggleImg" + num);
                 if (img.src.includes("On.png")) {
-                    img.src = "..../Image/Off.png";  // 해당 이미지 변경 (Off 이미지로)
+                    img.src = "../Image/Off.png";  // 해당 이미지 변경 (Off 이미지로)
                 } else {
-                    img.src = "..../Image/On.png";   // 해당 이미지 변경 (On 이미지로)
+                    img.src = "../Image/On.png";   // 해당 이미지 변경 (On 이미지로)
                 }
                 
                 // 이미지 상태를 확인하고 Component 2 이미지를 변경
@@ -72,9 +72,9 @@
                 
                 // 아무것도 Off 상태가 아니면 Component 2 이미지
                 if (!img1.includes("Off.png") && !img2.includes("Off.png") && !img3.includes("Off.png")) {
-                    document.getElementById("componentImg").src = "..../Image/Component 2.png"; // 원래 이미지로 복원
+                    document.getElementById("componentImg").src = "../Image/Component 2.png"; // 원래 이미지로 복원
                 } else {
-                    document.getElementById("componentImg").src = "..../Image/CP2x.png"; // 하나라도 Off 상태이면 CP2 이미지로 변경
+                    document.getElementById("componentImg").src = "../Image/CP2x.png"; // 하나라도 Off 상태이면 CP2 이미지로 변경
                 }
             }
         </script>
