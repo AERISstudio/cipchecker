@@ -1,5 +1,5 @@
 import { getAuth, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-import { auth } from "../static/firebase_config.js";
+import { auth } from "/static/firebase_config.js";
 
 function login() {
     let studentId = document.getElementById("studentId").value.trim();
