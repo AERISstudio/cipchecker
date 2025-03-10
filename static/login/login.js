@@ -1,5 +1,5 @@
-import { getAuth, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 import { auth } from "/static/firebase_config.js";
+import { signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
 function login() {
     let studentId = document.getElementById("studentId").value.trim();
@@ -11,25 +11,20 @@ function login() {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.error) {
-            console.error("❌ 서버 응답 오류:", data.error);
-            alert(data.error);  // 사용자에게 오류 표시
-        } else if (data.token) {
+        if (data.token) {
             signInWithCustomToken(auth, data.token)
                 .then(() => {
                     console.log("✅ 로그인 성공:", studentId);
-                    window.location.href = data.redirect;  // 서버에서 받은 리디렉션 경로 사용
+                    window.location.href = data.redirect; // 🔥 Flask에서 반환한 경로로 이동
                 })
                 .catch(error => {
-                    console.error("🔥 Firebase 로그인 실패:", error.message);
+                    console.error("❌ Firebase 로그인 실패:", error.message);
                 });
         } else {
-            console.error("❌ 알 수 없는 서버 응답:", data);
+            console.error("❌ 서버 응답 오류:", data.error);
         }
     })
-    .catch(error => {
-        console.error("❌ 요청 실패:", error);
-    });
+    .catch(error => console.error("❌ 요청 중 오류 발생:", error));
 }
 
-window.login = login;
+window.login = login; // ✅ HTML에서 호출할 수 있도록 설정
