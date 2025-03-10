@@ -40,22 +40,26 @@ def student_login():
 
         custom_token = auth.create_custom_token(student_id)
         session["student_id"] = student_id
-        return jsonify({"token": custom_token.decode("utf-8"), "redirect": url_for("selection")}), 200
+        return jsonify({"token": custom_token.decode("utf-8"), "redirect": url_for("select")}), 200
 
     except Exception as e:
         print(f"❌ 로그인 오류: {e}")
         return jsonify({"error": f"서버 오류 발생: {str(e)}"}), 500
 
 # ✅ 공간 선택 페이지
-@app.route("/selection")
-def selection():
+@app.route("/select")
+def select():
     if "student_id" not in session:
         return redirect(url_for("login_page"))
-    return render_template("selection.html")
+    return render_template("select.html")
+
+@app.route("/study", methods=["GET"])
+def study_page():
+    return render_template("study.html")
 
 # ✅ 자습실1 선택 시 Firebase 및 엑셀 업데이트
-@app.route("/update_selection", methods=["POST"])
-def update_selection():
+@app.route("/update_select", methods=["POST"])
+def update_select():
     try:
         if "student_id" not in session:
             return jsonify({"error": "❌ 로그인 후 이용하세요!"}), 403
