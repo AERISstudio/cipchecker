@@ -3,9 +3,9 @@ import firebase_admin
 from firebase_admin import credentials, auth, db
 import pandas as pd
 import os
+import threading
 import schedule
 import time
-import threading
 from datetime import timedelta
 
 app = Flask(__name__)
@@ -18,31 +18,9 @@ app.secret_key = os.urandom(24)  # 🔥 랜덤 보안 키 자동 생성
 cred = credentials.Certificate("dshs-cip-firebase-adminsdk-fbsvc-62090c1d93.json")
 firebase_admin.initialize_app(cred, {"databaseURL": "https://dshs-cip-default-rtdb.firebaseio.com/"})
 
-# ✅ 로그인 페이지
-@app.route("/", methods=["GET", "POST"])
-def login():
-    if request.method == "POST":
-        student_id = request.form.get("student_id", "").strip()
-
-        # ✅ 관리자 모드 (0000000 입력 시)
-        if student_id == "0000000":
-            return redirect(url_for("admin_dashboard"))
-
-        if not student_id.isdigit() or len(student_id) not in [5, 7]:
-            return "❌ 유효한 학번을 입력하세요!", 400
-
-        # 🔥 Firebase에서 학번으로 사용자 확인 또는 생성
-        try:
-            user = auth.get_user(student_id)
-        except:
-            user = auth.create_user(uid=student_id)
-
-        session["student_id"] = student_id
-        session.permanent = True  # ✅ 세션 지속 모드 활성화
-        print(f"✅ 세션 저장 완료: {session['student_id']}")
-
-        return redirect(url_for("selection"))
-
+# ✅ 로그인 페이지 (GET 요청)
+@app.route("/", methods=["GET"])
+def login_page():
     return render_template("login.html")
 
 # ✅ 로그인 처리 (POST 요청)
@@ -65,7 +43,7 @@ def student_login():
         # 🔥 Firebase Custom Token 생성 및 세션 저장
         custom_token = auth.create_custom_token(student_id)
         session["student_id"] = student_id
-        return jsonify({"token": custom_token.decode("utf-8"), "message": "✅ 로그인 성공"}), 200
+        return jsonify({"token": custom_token.decode("utf-8"), "redirect": url_for("selection")}), 200
 
     except Exception as e:
         print(f"❌ 로그인 중 서버 오류 발생: {e}")
@@ -75,38 +53,21 @@ def student_login():
 @app.route("/selection")
 def selection():
     if "student_id" not in session:
-        return redirect(url_for("login"))
+        return redirect(url_for("login_page"))
     return render_template("selection.html")
 
 # ✅ 활동별 페이지 라우팅
 @app.route("/study")
 def study():
-    return render_template("study.html") if "student_id" in session else redirect(url_for("login"))
+    return render_template("study.html") if "student_id" in session else redirect(url_for("login_page"))
 
 @app.route("/activity")
 def activity():
-    return render_template("activity.html") if "student_id" in session else redirect(url_for("login"))
+    return render_template("activity.html") if "student_id" in session else redirect(url_for("login_page"))
 
 @app.route("/academy")
 def academy():
-    return render_template("academy.html") if "student_id" in session else redirect(url_for("login"))
-
-# ✅ 관리자 대시보드 (10반 엑셀 조회)
-@app.route("/admin_dashboard")
-def admin_dashboard():
-    if "student_id" not in session or session["student_id"] != "0000000":
-        return "❌ 관리자 전용 페이지입니다!", 403
-
-    excel_data = {}
-    for class_num in range(1, 11):
-        file_name = f"{class_num}반.xlsx"
-        if os.path.exists(file_name):
-            df = pd.read_excel(file_name, engine="openpyxl")
-            excel_data[f"{class_num}반"] = df.to_dict(orient="records")
-        else:
-            excel_data[f"{class_num}반"] = "파일 없음"
-
-    return render_template("admin_dashboard.html", excel_data=excel_data)
+    return render_template("academy.html") if "student_id" in session else redirect(url_for("login_page"))
 
 # ✅ 선택한 활동을 엑셀에 저장
 @app.route("/update_excel", methods=["POST"])
@@ -125,10 +86,7 @@ def update_excel():
         # ✅ JSON 데이터 확인
         data = request.get_json()
         if not data:
-            print("❌ JSON 데이터 없음!")
             return jsonify({"error": "❌ 전송된 JSON 데이터가 없습니다."}), 400
-
-        print(f"✅ 받은 JSON 데이터: {data}")
 
         cip1, cip2, cip3 = "자습", "자습", "자습"
 
@@ -141,43 +99,26 @@ def update_excel():
 
         # 🔥 엑셀 파일 존재 확인 및 생성
         if not os.path.exists(file_name):
-            print(f"⚠️ {file_name} 파일 없음! 새로 생성 중...")
             df = pd.DataFrame(columns=["학번", "CIP1", "CIP2", "CIP3"])
             df.to_excel(file_name, index=False, engine="openpyxl")
 
         # 🔥 기존 엑셀 파일 로드
-        try:
-            df = pd.read_excel(file_name, engine="openpyxl")
-        except Exception as e:
-            print(f"❌ 엑셀 파일 로드 실패: {e}")
-            return jsonify({"error": f"❌ 엑셀 파일 로드 오류: {str(e)}"}), 500
-
-        # 🔥 학번 컬럼이 존재하는지 확인 후 변환
-        if "학번" not in df.columns:
-            print("⚠️ '학번' 컬럼 없음! 추가 중...")
-            df["학번"] = ""
-
-        df["학번"] = df["학번"].astype(str).fillna("")  # 🔥 NaN 값 제거 후 문자열 변환
-
+        df = pd.read_excel(file_name, engine="openpyxl")
+        
         # 🔥 학번이 없으면 추가, 있으면 수정
+        df["학번"] = df["학번"].astype(str).fillna("")
         if student_id not in df["학번"].values:
-            print(f"➕ 신규 학번 추가: {student_id}")
             new_data = pd.DataFrame([[student_id, cip1, cip2, cip3]], columns=["학번", "CIP1", "CIP2", "CIP3"])
             df = pd.concat([df, new_data], ignore_index=True)
         else:
-            print(f"🔄 기존 학번 수정: {student_id}")
             df.loc[df["학번"] == student_id, ["CIP1", "CIP2", "CIP3"]] = [cip1, cip2, cip3]
 
         # 🔥 학번 정렬 (마지막 두 자리 기준)
-        try:
-            df["학번_번호"] = df["학번"].str[-2:].astype(int)  # 🔥 학번 마지막 2자리 정수 변환
-            df = df.sort_values(by="학번_번호").drop(columns=["학번_번호"])  # 🔥 정렬 후 임시 컬럼 삭제
-        except Exception as e:
-            print(f"⚠️ 학번 정렬 오류 발생: {e}")
+        df["학번_번호"] = df["학번"].str[-2:].astype(int)
+        df = df.sort_values(by="학번_번호").drop(columns=["학번_번호"])
 
         # 🔥 엑셀 저장
         df.to_excel(file_name, index=False, engine="openpyxl")
-        print(f"✅ {file_name} 업데이트 완료!")
 
         return jsonify({"message": "✅ 선택이 저장되었습니다."}), 200
 
@@ -185,16 +126,36 @@ def update_excel():
         print(f"❌ 서버 오류 발생: {e}")
         return jsonify({"error": f"서버 오류 발생: {str(e)}"}), 500
 
+# ✅ 출력 페이지 (버튼 클릭 시 이동)
+@app.route("/admin_print")
+def admin_print():
+    return render_template("admin_print.html")
 
-# 🔥 자동 초기화 (매일 12시)
-schedule.every().day.at("00:00").do(lambda: print("🔄 데이터 초기화 실행!"))
+@app.route("/get_excel_data")
+def get_excel_data():
+    class_num = request.args.get("class")  # URL에서 class_num 가져오기
+    formatted_class_num = f"{int(class_num):02d}"  # 🔥 앞에 0이 붙은 두 자리 숫자로 변환 (예: "1" → "01")
 
-def run_scheduler():
-    while True:
-        schedule.run_pending()
-        time.sleep(60)
+    file_name = f"{formatted_class_num}반.xlsx"  # 🔥 실제 저장된 파일명 형식 맞추기
 
-threading.Thread(target=run_scheduler, daemon=True).start()
+    # 🔥 디버깅: 현재 폴더 내 파일 리스트 출력
+    existing_files = os.listdir(".")
+    print(f"📂 존재하는 엑셀 파일: {existing_files}")  
+
+    # 🔥 해당 반의 엑셀 파일이 존재하는지 확인
+    if file_name not in existing_files:
+        print(f"❌ {file_name} 파일이 존재하지 않습니다!")
+        return jsonify({"error": f"{class_num}반 엑셀 파일이 없습니다."})
+
+    # 🔥 엑셀 파일 읽기
+    try:
+        df = pd.read_excel(file_name, engine="openpyxl")
+        return jsonify(df.to_dict(orient="records"))
+    except Exception as e:
+        print(f"❌ 엑셀 파일 로드 오류: {e}")
+        return jsonify({"error": f"엑셀 파일을 불러오는 중 오류 발생: {str(e)}"})
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
