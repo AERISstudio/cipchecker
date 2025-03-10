@@ -28,7 +28,7 @@
 
         // ✅ 현재 자습실1의 인원 수 가져오기
         async function updateRoomCapacity() {
-            const roomRef = ref(database, "rooms/자습실/자습실1");
+            const roomRef = ref(database, "rooms/자습실/자습실3");
             try {
                 const snapshot = await get(roomRef);
                 if (snapshot.exists()) {

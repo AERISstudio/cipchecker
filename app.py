@@ -113,7 +113,56 @@ def update_select():
             except Exception as e:
                 print(f"❌ Firebase 업데이트 오류: {e}")
                 return jsonify({"error": "Firebase 업데이트 중 오류 발생"}), 500
+            
+        if selected_room == "자습실2":
+            try:
+                room_ref = db.reference("rooms/자습실/자습실2")
+                room_data = room_ref.get()
 
+                # 🔥 데이터가 존재하지 않을 경우 기본 값 추가
+                if room_data is None:
+                    print("⚠️ Firebase에 자습실2 데이터가 없음! 초기화 진행...")
+                    room_data = {"max_capacity": 30, "current_capacity": 0}
+                    room_ref.set(room_data)
+
+                current_capacity = room_data.get("current_capacity", 0)
+                max_capacity = room_data.get("max_capacity", 0)
+
+                if current_capacity >= max_capacity:
+                    return jsonify({"error": "⚠️ 자습실2이(가) 이미 가득 찼습니다!"})
+
+                # ✅ 현재 인원을 1 증가
+                room_ref.update({"current_capacity": current_capacity + 1})
+            
+            except Exception as e:
+                print(f"❌ Firebase 업데이트 오류: {e}")
+                return jsonify({"error": "Firebase 업데이트 중 오류 발생"}), 500
+            
+        # ✅ 자습실3 선택 시 Firebase 인원 증가
+        if selected_room == "자습실3":
+            try:
+                room_ref = db.reference("rooms/자습실/자습실3")
+                room_data = room_ref.get()
+
+                # 🔥 데이터가 존재하지 않을 경우 기본 값 추가
+                if room_data is None:
+                    print("⚠️ Firebase에 자습실3 데이터가 없음! 초기화 진행...")
+                    room_data = {"max_capacity": 30, "current_capacity": 0}
+                    room_ref.set(room_data)
+
+                current_capacity = room_data.get("current_capacity", 0)
+                max_capacity = room_data.get("max_capacity", 0)
+
+                if current_capacity >= max_capacity:
+                    return jsonify({"error": "⚠️ 자습실3이(가) 이미 가득 찼습니다!"})
+
+                # ✅ 현재 인원을 1 증가
+                room_ref.update({"current_capacity": current_capacity + 1})
+
+            except Exception as e:
+                print(f"❌ Firebase 업데이트 오류: {e}")
+                return jsonify({"error": "Firebase 업데이트 중 오류 발생"}), 500
+            
         # ✅ 엑셀 파일 존재 확인 및 생성
         if not os.path.exists(file_name):
             df = pd.DataFrame(columns=["학번", "CIP1", "CIP2", "CIP3"])
