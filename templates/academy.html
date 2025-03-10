@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>자습실 선택 및 CIP 선택</title>
+    <title>학원</title>
     
     <!-- ✅ Firebase SDK 로드 -->
     <script type="module">
@@ -28,7 +28,7 @@
 
         // ✅ 현재 자습실1의 인원 수 가져오기
         async function updateRoomCapacity() {
-            const roomRef = ref(database, "rooms/자습실/자습실2");
+            const roomRef = ref(database, "rooms/자습실/자습실1");
             try {
                 const snapshot = await get(roomRef);
                 if (snapshot.exists()) {
@@ -44,15 +44,16 @@
             }
         }
 
-        // ✅ 자습실2 선택 + CIP 선택 통합 함수
+        // ✅ 자습실1 선택 + CIP 선택 통합 함수
         window.submitSelection = async function () {
             try {
                 // ✅ CIP 선택 확인
+                
                 const cip2 = document.getElementById("cip2").checked ? "CIP2" : "자습";
                 const cip3 = document.getElementById("cip3").checked ? "CIP3" : "자습";
 
-                // ✅ 현재 자습실2 인원 확인
-                const roomRef = ref(database, "rooms/자습실/자습실2");
+                // ✅ 현재 자습실1 인원 확인
+                const roomRef = ref(database, "rooms/자습실/자습실1");
                 const snapshot = await get(roomRef);
 
                 if (snapshot.exists()) {
