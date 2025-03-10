@@ -53,9 +53,21 @@ def select():
         return redirect(url_for("login_page"))
     return render_template("select.html")
 
-@app.route("/study", methods=["GET"])
-def study_page():
-    return render_template("study.html")
+@app.route("/studyselect", methods=["GET"])
+def studyselect_page():
+    return render_template("studyselect.html")
+
+@app.route("/study1", methods=["GET"])
+def study1_page():
+    return render_template("study1.html")
+
+@app.route("/study2", methods=["GET"])
+def study2_page():
+    return render_template("study2.html")
+
+@app.route("/study3", methods=["GET"])
+def study3_page():
+    return render_template("study3.html")
 
 # ✅ 자습실1 선택 시 Firebase 및 엑셀 업데이트
 @app.route("/update_select", methods=["POST"])
