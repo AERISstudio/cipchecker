@@ -165,7 +165,7 @@ def update_select():
             
         # ✅ 엑셀 파일 존재 확인 및 생성
         if not os.path.exists(file_name):
-            df = pd.DataFrame(columns=["학번", "CIP2", "CIP3"])
+            df = pd.DataFrame(columns=["학번", "CIP1", "CIP2", "CIP3"])
             df.to_excel(file_name, index=False, engine="openpyxl")
 
         # ✅ 엑셀 파일 읽기 (오류 대비)
@@ -178,10 +178,10 @@ def update_select():
         # ✅ 학번이 없으면 추가, 있으면 수정
         df["학번"] = df["학번"].astype(str).fillna("")
         if student_id not in df["학번"].values:
-            new_data = pd.DataFrame([[student_id, "자습실", cip2, cip3]], columns=["학번", "CIP2", "CIP3"])
+            new_data = pd.DataFrame([[student_id, cip1, cip2, cip3]], columns=["학번", "CIP1", "CIP2", "CIP3"])
             df = pd.concat([df, new_data], ignore_index=True)
         else:
-            df.loc[df["학번"] == student_id, ["CIP2", "CIP3"]] = ["자습실", cip2, cip3]
+            df.loc[df["학번"] == student_id, ["CIP1", "CIP2", "CIP3"]] = [cip1, cip2, cip3]
 
         # ✅ 학번 정렬 (마지막 두 자리 기준, 예외 처리 포함)
         try:
@@ -193,7 +193,7 @@ def update_select():
         # ✅ 엑셀 저장
         df.to_excel(file_name, index=False, engine="openpyxl")
 
-        return jsonify({"message": "✅ 자습실1 선택이 저장되었습니다."}), 200
+        return jsonify({"message": "✅ 자습실 선택이 저장되었습니다."}), 200
 
     except Exception as e:
         print(f"❌ 서버 오류 발생: {e}")
