@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>선택</title>
+    <link rel="stylesheet" href="CSS/choose.css">
+    <style>
+        /* 스크롤을 비활성화 */
+        html, body {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div style="display: flex; justify-content: space-around; align-items: center; height: 100vh; padding: 20px;">
+        <div style="background-color: rgba(255, 255, 255, 0); border: 0px;">
+            <a href="PerformanceRoom\chooseperformance.html">
+                <button style=" border: 0px; padding: 0px; background-color: rgba(0, 0, 0, 0); border: 0px;">
+                    <img style="width: 250px; height: 400px; box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.25); border-radius: 5px; border: 1px black solid" src="Image\performance.png" />
+                </button>
+            </a>    
+        </div>
+        <div style="background-color: rgba(255, 255, 255, 0); border: 0px;">
+            <a href="Success.html" onclick="showModal(event, this.href);">
+                <button style=" border: 0px; padding: 0px; background-color: rgba(0, 0, 0, 0); border: 0px;">
+                    <img style="width: 250px; height: 400px; box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.25); border-radius: 5px; border: 1px black solid" src="Image\Academy.png" />
+                </button>
+            </a>    
+        </div>
+        <div style="background-color: rgba(255, 255, 255, 0); border: 0px;">
+            <a href="ActivityRoom\choosheacitivity.html">
+                <button style=" border: 0px; padding: 0px; background-color: rgba(0, 0, 0, 0); border: 0px;">
+                    <img style="width: 250px; height: 400px; box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.25); border-radius: 5px; border: 1px black solid" src="Image\Activity.png" />
+                </button>
+            </a>    
+        </div>
+        <div style="background-color: rgba(255, 255, 255, 0); border: 0px;">
+            <a href="StudyRoom\choosesdtudy.html">
+                <button style=" border: 0px; padding: 0px; background-color: rgba(0, 0, 0, 0); border: 0px;">
+                    <img style="width: 250px; height: 400px; box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.25); border-radius: 5px; border: 1px black solid" src="Image\study.png" />
+                </button>
+            </a>    
+        </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <p>정말 학원에 가실겁니까?</p>
+            <button class="modal-button" onclick="confirmYes()">학원에 갈건데요?</button>
+            <button class="modal-button" onclick="confirmNo()">아니 안갈랭.</button>
+        </div>
+    </div>
+
+    <script>
+        let targetHref = '';
+
+        function showModal(event, href) {
+            event.preventDefault();
+            targetHref = href;
+            document.getElementById('myModal').style.display = 'block';
+        }
+
+        function confirmYes() {
+            window.location.href = targetHref;
+        }
+
+        function confirmNo() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+

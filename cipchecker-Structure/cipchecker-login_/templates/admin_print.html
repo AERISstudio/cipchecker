@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>반별 엑셀 데이터 출력</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+            text-align: center;
+        }
+        th, td {
+            padding: 10px;
+        }
+        /* 인쇄 시 스타일 */
+        @media print {
+            button, select {
+                display: none; /* 인쇄할 때 버튼과 드롭다운 숨김 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>반별 엑셀 데이터 출력</h1>
+    
+    <label for="classSelect">반 선택:</label>
+    <select id="classSelect" onchange="loadExcelData()">
+        <option value="1">1반</option>
+        <option value="2">2반</option>
+        <option value="3">3반</option>
+        <option value="4">4반</option>
+        <option value="5">5반</option>
+        <option value="6">6반</option>
+        <option value="7">7반</option>
+        <option value="8">8반</option>
+        <option value="9">9반</option>
+        <option value="10" selected>10반</option>
+    </select>
+
+    <button onclick="printPage()">🖨 인쇄</button>
+
+    <div id="tableContainer">
+        <table id="excelTable">
+            <thead>
+                <tr>
+                    <th>학번</th>
+                    <th>CIP1</th>
+                    <th>CIP2</th>
+                    <th>CIP3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 데이터가 여기에 동적으로 추가됨 -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function loadExcelData() {
+            let classNum = document.getElementById("classSelect").value;
+
+            fetch(`/get_excel_data?class=${classNum}`)
+                .then(response => response.json())
+                .then(data => {
+                    let tableBody = document.querySelector("#excelTable tbody");
+                    tableBody.innerHTML = "";  // 기존 데이터 초기화
+
+                    if (data.error) {
+                        tableBody.innerHTML = `<tr><td colspan="4">${data.error}</td></tr>`;
+                        return;
+                    }
+
+                    data.forEach(row => {
+                        let tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td>${row.학번}</td>
+                            <td>${row.CIP1}</td>
+                            <td>${row.CIP2}</td>
+                            <td>${row.CIP3}</td>
+                        `;
+                        tableBody.appendChild(tr);
+                    });
+                })
+                .catch(error => console.error("데이터 불러오기 실패:", error));
+        }
+
+        function printPage() {
+            loadExcelData();  // 데이터 로드 후 인쇄
+            setTimeout(() => {
+                window.print();
+            }, 1000); // 1초 대기 후 인쇄 (데이터 로드 보장)
+        }
+
+        // 페이지 로드 시 10반 데이터 기본 출력
+        document.addEventListener("DOMContentLoaded", loadExcelData);
+    </script>
+</body>
+</html>

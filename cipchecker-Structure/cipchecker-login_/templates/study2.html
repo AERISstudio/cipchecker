@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자습실 선택 및 CIP 선택</title>
+    
+    <!-- ✅ Firebase SDK 로드 -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+
+        // ✅ Firebase 설정
+        const firebaseConfig = {
+            apiKey: "AIzaSyCno_36Bl-DqjEk12lmFranNylngoo8Sd8",
+            authDomain: "dshs-cip.firebaseapp.com",
+            databaseURL: "https://dshs-cip-default-rtdb.firebaseio.com", 
+            projectId: "dshs-cip",
+            storageBucket: "dshs-cip.appspot.com",
+            messagingSenderId: "1033758614768",
+            appId: "1:1033758614768:web:6cc73592e6b9052fdfd4e35",
+            measurementId: "G-V8X4BKESWM"
+        };
+
+        // ✅ Firebase 초기화
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // ✅ 현재 자습실1의 인원 수 가져오기
+        async function updateRoomCapacity() {
+            const roomRef = ref(database, "rooms/자습실/자습실2");
+            try {
+                const snapshot = await get(roomRef);
+                if (snapshot.exists()) {
+                    const roomData = snapshot.val();
+                    const currentCapacity = roomData.current_capacity ?? 0;
+                    const maxCapacity = roomData.max_capacity || 30;
+                    document.getElementById("roomCapacity").innerText = `현재 인원: ${currentCapacity} / ${maxCapacity}`;
+                } else {
+                    document.getElementById("roomCapacity").innerText = "현재 인원 데이터를 불러올 수 없습니다.";
+                }
+            } catch (error) {
+                console.error("자습실 인원 수 업데이트 오류:", error);
+            }
+        }
+
+        // ✅ 자습실2 선택 + CIP 선택 통합 함수
+        window.submitSelection = async function () {
+            try {
+                // ✅ CIP 선택 확인
+                const cip2 = document.getElementById("cip2").checked ? "자습실2" : "자습";
+                const cip3 = document.getElementById("cip3").checked ? "자습실2" : "자습";
+
+                // ✅ 현재 자습실2 인원 확인
+                const roomRef = ref(database, "rooms/자습실/자습실2");
+                const snapshot = await get(roomRef);
+
+                if (snapshot.exists()) {
+                    let roomData = snapshot.val();
+                    let currentCapacity = roomData.current_capacity ?? 0;
+                    let maxCapacity = roomData.max_capacity || 30;
+
+                    if (currentCapacity >= maxCapacity) {
+                        alert("⚠️ 자습실1이(가) 이미 가득 찼습니다!");
+                        return;
+                    }
+
+                    // 🔥 Firebase 인원 업데이트
+                    await update(roomRef, { current_capacity: currentCapacity + 1 });
+
+                    // 🔥 Flask 서버에 CIP 선택 정보 전송
+                    const response = await fetch("/update_select", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ cip2, cip3 })
+                    });
+
+                    const data = await response.json();
+                    if (data.error) {
+                        alert("⚠️ " + data.error);
+                    } else {
+                        alert("✅ 선택이 저장되었습니다!");
+                        updateRoomCapacity(); // 인원 업데이트 후 다시 갱신
+                    }
+                } else {
+                    alert("⚠️ 공간 정보를 찾을 수 없습니다!");
+                }
+            } catch (error) {
+                console.error("선택 저장 오류:", error);
+                alert("❌ 오류가 발생했습니다. 다시 시도해주세요.");
+            }
+        };
+
+        window.onload = updateRoomCapacity;
+    </script>
+</head>
+<body>
+    <h2>자습실 선택 및 CIP 선택</h2>
+    <span id="roomCapacity">현재 인원: 불러오는 중...</span>
+
+    <h2>CIP 선택</h2>
+    <label><input type="checkbox" id="cip2"> CIP2</label>
+    <label><input type="checkbox" id="cip3"> CIP3</label>
+    
+    <br><br>
+    <button onclick="submitSelection()">저장</button>
+</body>
+</html>

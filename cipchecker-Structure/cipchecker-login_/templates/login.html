@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+    <script type="module" src="../static/firebase_config.js"></script>
+    <script type="module" src="../static/login/login.js"></script>
+</head>
+<body>
+    <h2>학번 입력 후 로그인</h2>
+    <input type="text" id="studentId" placeholder="학번 입력">
+    <button onclick="login()">로그인</button>
+    <p id="error-message"></p>
+    <!-- 🔥 추가: 출력 버튼 -->
+    
+    <button onclick="window.location.href='/admin_print'">출력</button>
+</body>
+</html>

@@ -1,0 +1,36 @@
+@font-face {
+    font-family: 'GmarketSansTTFBold' ;
+    src: url('../Font/GmarketSansTTFBold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;  /* 화면 높이를 꽉 채움 */
+    width: 100%;
+    margin-top: 100px;
+}
+
+.input-box {
+    width: 800px;
+    height: 65px;
+    padding: 10px;
+    font-size: 20px;
+    border: 2px solid #C2C2C2;
+    box-shadow: 6px 6px 0px #C2C2C2;
+    border-radius: 5px;
+    outline: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.Next {
+    justify-content: center;
+    align-items: center;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 60px;
+}

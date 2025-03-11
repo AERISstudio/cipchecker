@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>선택창</title>
+</head>
+<body>
+    <h2>어디로 이동하시겠습니까?</h2>
+    <button onclick="goToPage('studyselect')">자습실</button>
+    <button onclick="goToPage('activity')">활동실</button>
+    <button onclick="goToPage('academy')">학원 자습</button>
+
+    <script>
+        
+        function goToPage(page) {
+            window.location.href = "./" + page;
+        }
+    </script>
+</body>
+</html>
