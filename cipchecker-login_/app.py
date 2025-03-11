@@ -12,7 +12,7 @@ app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=3)
 app.secret_key = os.urandom(24)  # 🔥 랜덤 보안 키 자동 생성
 
 # 🔥 Firebase 초기화 (Realtime Database 포함)
-cred = credentials.Certificate("dshs-cip-firebase-adminsdk-fbsvc-62090c1d93.json")
+cred = credentials.Certificate("dshs-cip-firebase-adminsdk-fbsvc-d04e1b4bf0.json")
 firebase_admin.initialize_app(cred, {"databaseURL": "https://dshs-cip-default-rtdb.firebaseio.com/"})
 
 # ✅ 로그인 페이지
@@ -87,7 +87,7 @@ def update_select():
         selected_room = data.get("selected_room")
         cip1 = data.get("cip1", "자습")
         cip2 = data.get("cip2", "자습")
-        cip3 = data.get("cip3", "자습")
+        cip3 = data.get("cip3", "자습") 
 
         # ✅ 자습실1 선택 시 Firebase 인원 증가
         if selected_room == "자습실1":
