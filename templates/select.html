@@ -6,6 +6,7 @@
 </head>
 <body>
     <h2>어디로 이동하시겠습니까?</h2>
+    <button onclick="goToPage('PerformenceRoom/performenceselect')">수행실</button>
     <button onclick="goToPage('StudyRoom/studyselect')">자습실</button>
     <button onclick="goToPage('ActivityRoom/activityselect')">활동실</button>
     <button onclick="goToPage('academy')">학원 자습</button>
@@ -14,6 +15,24 @@
         
         function goToPage(page) {
             window.location.href = "./" + page;
+        }
+
+        function selectAcademy() {
+            fetch("/update_select", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ selected_room: "학원", cip2: "학원", cip3: "학원" })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert("⚠️ " + data.error);
+                } else {
+                    alert("✅ 학원 자습이 저장되었습니다!");
+                    window.location.href = "./academy";
+                }
+            })
+            .catch(error => console.error("데이터 전송 실패:", error));
         }
     </script>
 </body>
