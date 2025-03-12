@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>활동실 선택 및 CIP 선택</title>
+    <title>자습실 선택 및 CIP 선택</title>
     
     <!-- ✅ Firebase SDK 로드 -->
     <script type="module">
@@ -26,9 +26,9 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // ✅ 현재 활동실1의 인원 수 가져오기
+        // ✅ 현재 자습실1의 인원 수 가져오기
         async function updateRoomCapacity() {
-            const roomRef = ref(database, "rooms/활동실/활동실1");
+            const roomRef = ref(database, "rooms/자습실/자습실3");
             try {
                 const snapshot = await get(roomRef);
                 if (snapshot.exists()) {
@@ -40,20 +40,19 @@
                     document.getElementById("roomCapacity").innerText = "현재 인원 데이터를 불러올 수 없습니다.";
                 }
             } catch (error) {
-                console.error("활동실 인원 수 업데이트 오류:", error);
+                console.error("자습실 인원 수 업데이트 오류:", error);
             }
         }
 
-        // ✅ 활동실1 선택 + CIP 선택 통합 함수
+        // ✅ 자습실1 선택 + CIP 선택 통합 함수
         window.submitSelection = async function () {
             try {
                 // ✅ CIP 선택 확인
-                
-                const cip2 = document.getElementById("cip2").checked ? "활동실1" : "자습";
-                const cip3 = document.getElementById("cip3").checked ? "활동실1" : "자습";
+                const cip2 = document.getElementById("cip2").checked ? "자습실3" : "자습";
+                const cip3 = document.getElementById("cip3").checked ? "자습실3" : "자습";
 
-                // ✅ 현재 활동실1 인원 확인
-                const roomRef = ref(database, "rooms/활동실/활동실1");
+                // ✅ 현재 자습실1 인원 확인
+                const roomRef = ref(database, "rooms/자습실/자습실1");
                 const snapshot = await get(roomRef);
 
                 if (snapshot.exists()) {
@@ -62,7 +61,7 @@
                     let maxCapacity = roomData.max_capacity || 30;
 
                     if (currentCapacity >= maxCapacity) {
-                        alert("⚠️ 활동실1이(가) 이미 가득 찼습니다!");
+                        alert("⚠️ 자습실1이(가) 이미 가득 찼습니다!");
                         return;
                     }
 
@@ -96,7 +95,7 @@
     </script>
 </head>
 <body>
-    <h2>활동실 선택 및 CIP 선택</h2>
+    <h2>자습실 선택 및 CIP 선택</h2>
     <span id="roomCapacity">현재 인원: 불러오는 중...</span>
 
     <h2>CIP 선택</h2>

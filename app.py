@@ -53,10 +53,35 @@ def select():
         return redirect(url_for("login_page"))
     return render_template("select.html")
 
+@app.route("/PerformenceRoom/performenceselect", methods=["GET"])
+def performenceselect_page():
+    return render_template("PerformenceRoom/performenceselect.html")
+
+@app.route("/PerformenceRoom/performence1", methods=["GET"])
+def performence1_page():
+    return render_template("PerformenceRoom/performence1.html")
+
+@app.route("/PerformenceRoom/performence2", methods=["GET"])
+def performence2_page():
+    return render_template("PerformenceRoom/performence2.html")
+
+@app.route("/PerformenceRoom/performence3", methods=["GET"])
+def performence3_page():
+    return render_template("PerformenceRoom/performence3.html")
+
+@app.route("/PerformenceRoom/performence4", methods=["GET"])
+def performence4_page():
+    return render_template("PerformenceRoom/performence4.html")
+
+@app.route("/PerformenceRoom/performence5", methods=["GET"])
+def performence5_page():
+    return render_template("PerformenceRoom/performence5.html")
+
+
+
 @app.route("/academy")
 def academy():
     return render_template("academy.html")
-
 
 @app.route("/ActivityRoom/activityselect", methods=["GET"])
 def activityselect_page():
@@ -69,10 +94,6 @@ def activity1_page():
 @app.route("/ActivityRoom/activity2", methods=["GET"])
 def activity2_page():
     return render_template("ActivityRoom/activity2.html")
-
-@app.route("/ActivityRoom/activity3", methods=["GET"])
-def activity3_page():
-    return render_template("ActivityRoom/activity3.html")
 
 @app.route("/StudyRoom/studyselect", methods=["GET"])
 def studyselect_page():
@@ -88,7 +109,15 @@ def study2_page():
 
 @app.route("/StudyRoom/study3", methods=["GET"])
 def study3_page():
-    return render_template("study3.html")
+    return render_template("StudyRoom/study3.html")
+
+@app.route("/StudyRoom/study4", methods=["GET"])
+def study4_page():
+    return render_template("StudyRoom/study4.html")
+
+@app.route("/StudyRoom/study5", methods=["GET"])
+def study5_page():
+    return render_template("StudyRoom/study5.html")
 
 # ✅ 자습실1 선택 시 Firebase 및 엑셀 업데이트
 @app.route("/update_select", methods=["POST"])
