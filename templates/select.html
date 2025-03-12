@@ -9,12 +9,27 @@
     <button onclick="goToPage('PerformenceRoom/performenceselect')">수행실</button>
     <button onclick="goToPage('StudyRoom/studyselect')">자습실</button>
     <button onclick="goToPage('ActivityRoom/activityselect')">활동실</button>
-    <button onclick="goToPage('academy')">학원 자습</button>
+    <button onclick="saveToExcel('academy')">학원 자습</button>
 
     <script>
-        
         function goToPage(page) {
             window.location.href = "./" + page;
+        }
+
+        function saveToExcel(page) {
+            fetch('/save_to_excel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ page: page })
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = "./" + page;
+                } else {
+                    alert('엑셀 저장에 실패했습니다.');
+                }
+            });
         }
     </script>
 </body>

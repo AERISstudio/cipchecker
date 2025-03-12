@@ -4,6 +4,7 @@ from firebase_admin import credentials, auth, db
 import pandas as pd
 import os
 from datetime import timedelta
+import openpyxl
 
 app = Flask(__name__)
 
@@ -76,8 +77,6 @@ def performence4_page():
 @app.route("/PerformenceRoom/performence5", methods=["GET"])
 def performence5_page():
     return render_template("PerformenceRoom/performence5.html")
-
-
 
 @app.route("/academy")
 def academy():
@@ -169,6 +168,53 @@ def update_select():
         df.to_excel(file_name, index=False, engine="openpyxl")
 
         return jsonify({"message": "✅ 자습실 선택이 저장되었습니다."}), 200
+
+    except Exception as e:
+        print(f"❌ 서버 오류 발생: {e}")
+        return jsonify({"error": f"서버 오류 발생: {str(e)}"}), 500
+
+# ✅ 학원 자습 선택 시 엑셀 업데이트
+@app.route("/save_to_excel", methods=["POST"])
+def save_to_excel():
+    try:
+        if "student_id" not in session:
+            return jsonify({"error": "❌ 로그인 후 이용하세요!"}), 403
+
+        student_id = session["student_id"]
+        class_num = student_id[1:3]  # 🔥 학번에서 반 번호 추출 (예: 21008 → "10"반)
+        file_name = f"{class_num}반.xlsx"
+
+        # ✅ 엑셀 파일 존재 확인 및 생성
+        if not os.path.exists(file_name):
+            df = pd.DataFrame(columns=["학번", "CIP2", "CIP3"])
+            df.to_excel(file_name, index=False, engine="openpyxl")
+
+        # ✅ 엑셀 파일 읽기 (오류 대비)
+        try:
+            df = pd.read_excel(file_name, engine="openpyxl")
+        except Exception as e:
+            print(f"❌ 엑셀 파일 로드 오류: {e}")
+            return jsonify({"error": "엑셀 파일을 불러오는 중 오류 발생"}), 500
+
+        # ✅ 학번이 없으면 추가, 있으면 수정
+        df["학번"] = df["학번"].astype(str).fillna("")
+        if student_id not in df["학번"].values:
+            new_data = pd.DataFrame([[student_id, "학원 자습", "학원 자습"]], columns=["학번", "CIP2", "CIP3"])
+            df = pd.concat([df, new_data], ignore_index=True)
+        else:
+            df.loc[df["학번"] == student_id, ["CIP2", "CIP3"]] = ["학원 자습", "학원 자습"]
+
+        # ✅ 학번 정렬 (마지막 두 자리 기준, 예외 처리 포함)
+        try:
+            df["학번_번호"] = df["학번"].str[-2:].astype(int, errors="ignore")
+            df = df.sort_values(by="학번_번호").drop(columns=["학번_번호"])
+        except Exception as e:
+            print(f"⚠️ 학번 정렬 오류 발생: {e}")
+
+        # ✅ 엑셀 저장
+        df.to_excel(file_name, index=False, engine="openpyxl")
+
+        return jsonify({"message": "✅ 학원 자습 선택이 저장되었습니다."}), 200
 
     except Exception as e:
         print(f"❌ 서버 오류 발생: {e}")
