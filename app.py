@@ -12,7 +12,7 @@ app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=3)
 app.secret_key = os.urandom(24)  # 🔥 랜덤 보안 키 자동 생성
 
 # 🔥 Firebase 초기화 (Realtime Database 포함)
-cred = credentials.Certificate("dshs-cip-firebase-adminsdk-fbsvc-62090c1d93.json")
+cred = credentials.Certificate("dshs-cip-firebase-adminsdk-fbsvc-d04e1b4bf0.json")
 firebase_admin.initialize_app(cred, {"databaseURL": "https://dshs-cip-default-rtdb.firebaseio.com/"})
 
 # ✅ 로그인 페이지
@@ -53,19 +53,40 @@ def select():
         return redirect(url_for("login_page"))
     return render_template("select.html")
 
-@app.route("/studyselect", methods=["GET"])
+@app.route("/academy")
+def academy():
+    return render_template("academy.html")
+
+
+@app.route("/ActivityRoom/activityselect", methods=["GET"])
+def activityselect_page():
+    return render_template("ActivityRoom/activityselect.html")
+
+@app.route("/ActivityRoom/activity1", methods=["GET"])
+def activity1_page():
+    return render_template("ActivityRoom/activity1.html")
+
+@app.route("/ActivityRoom/activity2", methods=["GET"])
+def activity2_page():
+    return render_template("ActivityRoom/activity2.html")
+
+@app.route("/ActivityRoom/activity3", methods=["GET"])
+def activity3_page():
+    return render_template("ActivityRoom/activity3.html")
+
+@app.route("/StudyRoom/studyselect", methods=["GET"])
 def studyselect_page():
-    return render_template("studyselect.html")
+    return render_template("StudyRoom/studyselect.html")
 
-@app.route("/study1", methods=["GET"])
+@app.route("/StudyRoom/study1", methods=["GET"])
 def study1_page():
-    return render_template("study1.html")
+    return render_template("StudyRoom/study1.html")
 
-@app.route("/study2", methods=["GET"])
+@app.route("/StudyRoom/study2", methods=["GET"])
 def study2_page():
-    return render_template("study2.html")
+    return render_template("StudyRoom/study2.html")
 
-@app.route("/study3", methods=["GET"])
+@app.route("/StudyRoom/study3", methods=["GET"])
 def study3_page():
     return render_template("study3.html")
 
@@ -85,7 +106,6 @@ def update_select():
             return jsonify({"error": "❌ 전송된 JSON 데이터가 없습니다."}), 400
 
         selected_room = data.get("selected_room")
-        cip1 = data.get("cip1", "자습")
         cip2 = data.get("cip2", "자습")
         cip3 = data.get("cip3", "자습")
 
@@ -165,7 +185,7 @@ def update_select():
             
         # ✅ 엑셀 파일 존재 확인 및 생성
         if not os.path.exists(file_name):
-            df = pd.DataFrame(columns=["학번", "CIP1", "CIP2", "CIP3"])
+            df = pd.DataFrame(columns=["학번", "CIP2", "CIP3"])
             df.to_excel(file_name, index=False, engine="openpyxl")
 
         # ✅ 엑셀 파일 읽기 (오류 대비)
@@ -178,10 +198,10 @@ def update_select():
         # ✅ 학번이 없으면 추가, 있으면 수정
         df["학번"] = df["학번"].astype(str).fillna("")
         if student_id not in df["학번"].values:
-            new_data = pd.DataFrame([[student_id, cip1, cip2, cip3]], columns=["학번", "CIP1", "CIP2", "CIP3"])
+            new_data = pd.DataFrame([[student_id, cip2, cip3]], columns=["학번", "CIP2", "CIP3"])
             df = pd.concat([df, new_data], ignore_index=True)
         else:
-            df.loc[df["학번"] == student_id, ["CIP1", "CIP2", "CIP3"]] = [cip1, cip2, cip3]
+            df.loc[df["학번"] == student_id, ["CIP2", "CIP3"]] = [cip2, cip3]
 
         # ✅ 학번 정렬 (마지막 두 자리 기준, 예외 처리 포함)
         try:

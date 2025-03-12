@@ -48,7 +48,6 @@
             <thead>
                 <tr>
                     <th>학번</th>
-                    <th>CIP1</th>
                     <th>CIP2</th>
                     <th>CIP3</th>
                 </tr>
@@ -70,7 +69,7 @@
                     tableBody.innerHTML = "";  // 기존 데이터 초기화
 
                     if (data.error) {
-                        tableBody.innerHTML = `<tr><td colspan="4">${data.error}</td></tr>`;
+                        tableBody.innerHTML = `<tr><td colspan="3">${data.error}</td></tr>`;
                         return;
                     }
 
@@ -78,7 +77,6 @@
                         let tr = document.createElement("tr");
                         tr.innerHTML = `
                             <td>${row.학번}</td>
-                            <td>${row.CIP1}</td>
                             <td>${row.CIP2}</td>
                             <td>${row.CIP3}</td>
                         `;
