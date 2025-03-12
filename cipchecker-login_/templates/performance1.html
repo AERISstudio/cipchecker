@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>시간 선택</title>
-    <link rel="stylesheet" href="..\CSS\cip.css">
+    <link rel="stylesheet" href="../static\CSS\cip.css">
 </head>
 <body>
-    <div style="text-align: center; position: relative; color: black; font-size: 73.16px; font-family: 'GmarketSansTTFBold'; font-weight: 500; word-wrap: break-word">학습실 3</div>
+    <div style="text-align: center; position: relative; color: black; font-size: 73.16px; font-family: 'GmarketSansTTFBold'; font-weight: 500; word-wrap: break-word">학습실 1</div>
     <div style="display: flex; justify-content: center; align-items: center; height: 100%; flex-direction: column; text-align: center;">
         <a>
             <button class="toggle-btn" style="background-color: rgba(240, 248, 255, 0); border: 0px rgb(255, 255, 255) solid;" onclick="toggleImage(2)">
                 <div style="position: relative; display: inline-block; width: 600px; height: 100px;">
-                    <img id="toggleImg2" src="../Image/On.png" alt="CIP 2차" style="width: 100%; height: 100%; border-radius: 5px;">
+                    <img id="toggleImg2" src="../static/Image/On.png" alt="CIP 2차" style="width: 100%; height: 100%; border-radius: 5px;">
                     <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #6c6c6c; font-size: 20px; font-weight: bold;">
                         CIP 2차
                     </span>
@@ -24,7 +24,7 @@
         <a>
             <button class="toggle-btn" style="background-color: rgba(240, 248, 255, 0); border: 0px rgb(255, 255, 255) solid;" onclick="toggleImage(3)">
                 <div style="position: relative; display: inline-block; width: 600px; height: 100px;">
-                    <img id="toggleImg3" src="../Image/On.png" alt="CIP 3차" style="width: 100%; height: 100%; border-radius: 5px;">
+                    <img id="toggleImg3" src="../static/Image/On.png" alt="CIP 3차" style="width: 100%; height: 100%; border-radius: 5px;">
                     <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #6c6c6c; font-size: 20px; font-weight: bold;">
                         CIP 3차
                     </span>
@@ -32,10 +32,10 @@
             </button>
         </a>
         <br>
-        <a id="successLink" href="../Success.html" onclick="return checkLinkStatus(event);">
+        <a id="successLink" href="/Success.html" onclick="return checkLinkStatus(event);">
             <button style="background-color: rgba(255, 0, 0, 0); border: 0px;">
                 <div>
-                    <img id="componentImg" src="../Image/Component 2.png">
+                    <img id="componentImg" src="../static/Image/Component 2.png">
                 </div>
             </button>
         </a>
@@ -44,9 +44,9 @@
             function toggleImage(num) {
                 var img = document.getElementById("toggleImg" + num);
                 if (img.src.includes("On.png")) {
-                    img.src = "../Image/Off.png";
+                    img.src = "../static/Image/Off.png";
                 } else {
-                    img.src = "../Image/On.png";
+                    img.src = "../static/Image/On.png";
                 }
                 checkCIPStatus();
             }
@@ -56,9 +56,9 @@
                 var img3 = document.getElementById("toggleImg3").src;
                 
                 if (!img2.includes("Off.png") && !img3.includes("Off.png")) {
-                    document.getElementById("componentImg").src = "../Image/Component 2.png";
+                    document.getElementById("componentImg").src = "../static/Image/Component 2.png";
                 } else {
-                    document.getElementById("componentImg").src = "../Image/CP2x.png";
+                    document.getElementById("componentImg").src = "../static/Image/CP2x.png";
                 }
             }
 

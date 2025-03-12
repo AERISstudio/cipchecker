@@ -47,27 +47,72 @@ def student_login():
         return jsonify({"error": f"서버 오류 발생: {str(e)}"}), 500
 
 # ✅ 공간 선택 페이지
-@app.route("/select")
+@app.route("/select") 
 def select():
     if "student_id" not in session:
         return redirect(url_for("login_page"))
-    return render_template("select.html")
+    return render_template("choose.html")
 
-@app.route("/studyselect", methods=["GET"])
-def studyselect_page():
-    return render_template("studyselect.html")
+@app.route("/choosesdtudy", methods=["GET"])
+def choosesdtudy():
+    return render_template("choosesdtudy.html")
+
+@app.route("/chooseperformance", methods=["GET"])
+def chooseperformance():
+    return render_template("chooseperformance.html")
+
+@app.route("/choosheacitivity", methods=["GET"])
+def choosheacitivity():
+    return render_template("choosheacitivity.html")
+
 
 @app.route("/study1", methods=["GET"])
 def study1_page():
-    return render_template("study1.html")
-
+    return render_template("study1n.html")
+                
 @app.route("/study2", methods=["GET"])
 def study2_page():
-    return render_template("study2.html")
+    return render_template("study2n.html")
 
 @app.route("/study3", methods=["GET"])
 def study3_page():
-    return render_template("study3.html")
+    return render_template("study3n.html")
+
+@app.route("/study4", methods=["GET"])
+def study4_page():
+    return render_template("study4n.html")
+
+@app.route("/study5", methods=["GET"])
+def study5_page():
+    return render_template("study5n.html")
+
+
+
+
+@app.route("/performance1", methods=["GET"])
+def performance1_page():
+    return render_template("performance1.html")
+
+@app.route("/performance2", methods=["GET"])
+def performance2_page():
+    return render_template("performance2.html")
+
+@app.route("/performance3", methods=["GET"])
+def performance3_page():
+    return render_template("performance3.html")
+
+
+
+@app.route("/activity1", methods=["GET"])
+def activity1_page():
+    return render_template("activity1.html")
+
+@app.route("/activity2", methods=["GET"])
+def activity2_page():
+    return render_template("activity2.html")
+
+
+
 
 # ✅ 자습실1 선택 시 Firebase 및 엑셀 업데이트
 @app.route("/update_select", methods=["POST"])
