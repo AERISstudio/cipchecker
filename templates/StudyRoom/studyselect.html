@@ -5,13 +5,89 @@
     <title>선택창</title>
 </head>
 <body>
-    <h2>자습실 선택</h2>
-    <button onclick="goToPage('study1')">자습실1</button>
-    <button onclick="goToPage('study2')">자습실2</button>
-    <button onclick="goToPage('study3')">자습실3</button>
-    <button onclick="goToPage('study4')">자습실4</button>
-    <button onclick="goToPage('study5')">자습실5</button>
-
+    <h2 style="display: flex; justify-content: center;">자습실 선택</h2>
+    <div style="display: flex; justify-content: center; box-shadow: none; margin-top: 50px; gap: 10px;">
+        <button style="
+        width: 150px;
+        height: 250px;
+        background-color: #D3D3D3;
+        border: 2px solid black;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+            justify-content: center;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+        text-decoration: none;
+        color: black;" onclick="goToPage('study1')">자습실1</button>
+        <button style="
+        width: 150px;
+        height: 250px;
+        background-color: #D3D3D3;
+        border: 2px solid black;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+            justify-content: center;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+        text-decoration: none;
+        color: black;" onclick="goToPage('study2')">자습실2</button>
+        <button style="
+        width: 150px;
+        height: 250px;
+        background-color: #D3D3D3;
+        border: 2px solid black;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+            justify-content: center;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+        text-decoration: none;
+        color: black;" onclick="goToPage('study3')">자습실3</button>
+        <button style="
+        width: 150px;
+        height: 250px;
+        background-color: #D3D3D3;
+        border: 2px solid black;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+            justify-content: center;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+        text-decoration: none;
+        color: black;" onclick="goToPage('study4')">자습실4</button>
+        <button style="
+        width: 150px;
+        height: 250px;
+        background-color: #D3D3D3;
+        border: 2px solid black;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+            justify-content: center;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+        text-decoration: none;
+        color: black;" onclick="goToPage('study5')">자습실5</button>
+    </div>
     <script>
         function goToPage(page) {
             window.location.href = "/StudyRoom/" + page;

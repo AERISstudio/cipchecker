@@ -3,15 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>선택창</title>
+    <link rel="'stylesheet" href="/static/CSS/choose.css">
 </head>
 <body>
-    <h2>활동실 선택</h2>
-    <button onclick="goToPage('activity1')">활동실1</button>
-    <button onclick="goToPage('activity2')">활동실2</button>
+    <h2 style="display: flex; justify-content: center;">활동실 선택</h2>
+    <div style="display: flex; justify-content: center; box-shadow: none; margin-top: 50px; gap: 10px;">
+        <button style="
+        width: 150px;
+        height: 250px;
+        background-color: #D3D3D3;
+        border: 2px solid black;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+        text-decoration: none;
+        color: black;"
+        onclick="goToPage('activity1')">
+            활동실1
+        </button>
 
+
+        <button style="
+        width: 150px;
+        height: 250px;
+        background-color: #D3D3D3;
+        border: 2px solid black;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+        text-decoration: none;
+        color: black;" 
+        onclick="goToPage('activity2')">
+            활동실2
+        </button>
+    </div>
+
+    
     <script>
         function goToPage(page) {
-            window.location.href = "/ActivityRoom/" + page;
+            window.location.href = "/ActivityRoom/" + page;     
         }
     </script>
 </body>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>자습실 선택 및 CIP 선택</title>
+    <link rel="'stylesheet" href="/static/CSS/cip.css">
     
     <!-- ✅ Firebase SDK 로드 -->
     <script type="module">
@@ -96,14 +97,60 @@
     </script>
 </head>
 <body>
-    <h2>자습실 선택 및 CIP 선택</h2>
-    <span id="roomCapacity">현재 인원: 불러오는 중...</span>
-
-    <h2>CIP 선택</h2>
-    <label><input type="checkbox" id="cip2"> CIP2</label>
-    <label><input type="checkbox" id="cip3"> CIP3</label>
+    <h2 style="display: flex; justify-content: center; ">CIP 선택</h2>
+    <span  style="display: flex; justify-content: center;" id="roomCapacity">현재 인원: 불러오는 중...</span>>
+    <label class="text-center" style="display: flex; justify-content: center; position: relative;">
+        <input type="checkbox" id="cip2">
+        <img id="img-cip2" src="/static/Image/On.png">
+        <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #6c6c6c; font-size: 20px; font-weight: bold;">
+            CIP 2차
+        </span>
+    </label>
+    <br/>
+    <label style="display: flex; justify-content: center; position: relative;">
+        <input type="checkbox" id="cip3">
+        <img id="img-cip3" src="/static/Image/On.png">
+        <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #6c6c6c; font-size: 20px; font-weight: bold;">
+            CIP 3차
+        </span>
+    </label>
     
-    <br><br>
-    <button onclick="submitSelection()">저장</button>
+    <br/>
+    <div style="display: flex; justify-content: center;">
+        <button id="submitBtn" style="box-shadow: none; border: none; background-color: rgba(240, 248, 255, 0);" onclick="submitSelection()" disabled>
+            <img id="btn-img" src="/static/Image/Component 2.png">
+        </button>
+    </div>
+    
+    <script>
+        function updateButtonState() {
+            const cip2Checked = document.getElementById('cip2').checked;
+            const cip3Checked = document.getElementById('cip3').checked;
+            const button = document.getElementById('submitBtn');
+            const btnImg = document.getElementById('btn-img');
+    
+            if (cip2Checked || cip3Checked) {
+                btnImg.src = '/static/Image/CP2x.png'; // 체크되면 버튼 이미지 변경
+                button.disabled = false; // 버튼 활성화
+            } else {
+                btnImg.src = '/static/Image/Component 2.png'; // 체크 해제되면 원래 이미지
+                button.disabled = true; // 버튼 비활성화
+            }
+        }
+    
+        document.getElementById('cip2').addEventListener('change', function () {
+            document.getElementById('img-cip2').src = this.checked ? '/static/Image/Off.png' : '/static/Image/On.png';
+            updateButtonState();
+        });
+    
+        document.getElementById('cip3').addEventListener('change', function () {
+            document.getElementById('img-cip3').src = this.checked ? '/static/Image/Off.png' : '/static/Image/On.png';
+            updateButtonState();
+        });
+    
+        function submitSelection() {
+            alert("제출 완료!");
+        }
+    </script>
 </body>
 </html>

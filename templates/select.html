@@ -3,13 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>선택창</title>
+    <link rel="'stylesheet" href="/static/CSS/choose.css">
 </head>
 <body>
-    <h2>어디로 이동하시겠습니까?</h2>
-    <button onclick="goToPage('PerformenceRoom/performenceselect')">수행실</button>
-    <button onclick="goToPage('StudyRoom/studyselect')">자습실</button>
-    <button onclick="goToPage('ActivityRoom/activityselect')">활동실</button>
-    <button onclick="saveToExcel('academy')">학원 자습</button>
+    <h2 style="display: flex; justify-content: center;">어디로 이동하시겠습니까?</h2>
+    <div style="display: flex; justify-content: center; box-shadow: none;">
+        <button style="border: none; box-shadow: none; background-color: rgba(0, 0, 0, 0);" onclick="goToPage('PerformenceRoom/performenceselect')">
+            <img src="/static/Image/performance.png">
+        </button>
+        <button style="border: none; box-shadow: none; background-color: rgba(0, 0, 0, 0);" onclick="goToPage('StudyRoom/studyselect')">
+            <img src="/static/Image/Study.png">
+        </button>
+        <button style="border: none; box-shadow: none; background-color: rgba(0, 0, 0, 0);" onclick="goToPage('ActivityRoom/activityselect')">
+            <img src="/static/Image/Activity.png">
+        </button>
+        <button style="border: none; box-shadow: none; background-color: rgba(0, 0, 0, 0);" onclick="saveToExcel('academy')">
+            <img src="/static/Image/academy.png">
+        </button>
+    </div>
 
     <script>
         function goToPage(page) {

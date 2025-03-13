@@ -1,0 +1,16 @@
+@font-face {
+    font-family: 'GmarketSansTTFBold';
+    src: url('/static/Font/GmarketSansTTFBold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+h2 {
+    font-family: 'GmarketSansTTFBold', sans-serif !important;
+}
+
+.text-center {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
