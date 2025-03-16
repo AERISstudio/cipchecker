@@ -236,4 +236,4 @@ def get_excel_data():
         return jsonify({"error": "엑셀 데이터 로드 중 오류 발생"}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
