@@ -70,14 +70,6 @@ def performence2_page():
 def performence3_page():
     return render_template("PerformenceRoom/performence3.html")
 
-@app.route("/PerformenceRoom/performence4", methods=["GET"])
-def performence4_page():
-    return render_template("PerformenceRoom/performence4.html")
-
-@app.route("/PerformenceRoom/performence5", methods=["GET"])
-def performence5_page():
-    return render_template("PerformenceRoom/performence5.html")
-
 @app.route("/academy")
 def academy():
     return render_template("academy.html")
