@@ -66,10 +66,6 @@ def performence1_page():
 def performence2_page():
     return render_template("PerformenceRoom/performence2.html")
 
-@app.route("/PerformenceRoom/performence3", methods=["GET"])
-def performence3_page():
-    return render_template("PerformenceRoom/performence3.html")
-
 @app.route("/academy")
 def academy():
     return render_template("academy.html")
@@ -85,6 +81,10 @@ def activity1_page():
 @app.route("/ActivityRoom/activity2", methods=["GET"])
 def activity2_page():
     return render_template("ActivityRoom/activity2.html")
+
+@app.route("/ActivityRoom/activity3", methods=["GET"])
+def activity3_page():
+    return render_template("ActivityRoom/activity3.html")
 
 @app.route("/StudyRoom/studyselect", methods=["GET"])
 def studyselect_page():
