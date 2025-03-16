@@ -166,7 +166,7 @@ def update_select():
 
         # ✅ 엑셀 저장
         df.to_excel(file_name, index=False, engine="openpyxl")
-
+    
         return jsonify({"message": "✅ 자습실 선택이 저장되었습니다."}), 200
 
     except Exception as e:

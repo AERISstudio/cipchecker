@@ -1,0 +1,67 @@
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.button-row-top {
+    display: flex;
+    gap: 80px;
+}
+
+.button-row-bottom {
+    display: flex;
+    gap: 80px;
+}
+
+.button {
+    padding: 15px 20px;
+    background-color: #333333;
+    color: #FFFFFF;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    line-height: 1.2;
+}
+
+/* 상단 버튼 (자습실 1, 2, 3) 스타일 */
+.button.top {
+    width: 240px;
+    height: 240px;
+}
+
+/* 하단 버튼 (자습실 4, 5) 스타일 */
+.button.bottom {
+    width: 400px;
+    height: 240px;
+    gap: 80px;
+}
+
+.button:hover {
+    background-color: #444444;
+}
+
+.button:active {
+    background-color: #222222;
+}
+
+.button span {
+    display: block;
+}
+
+.button .main-text {
+    font-size: 36px;
+}
+
+.button .sub-text {
+    font-size: 20px;
+}
+
+.button .info-text {
+    font-size: 16px;
+}

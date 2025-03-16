@@ -2,96 +2,34 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/CSS/select.css">
     <title>선택창</title>
 </head>
 <body>
-    <h2 style="display: flex; justify-content: center;">수행실 선택</h2>
-    <div style="display: flex; justify-content: center; box-shadow: none; margin-top: 50px; gap: 10px;">
-        <button style="
-        width: 150px;
-        height: 250px;
-        background-color: #D3D3D3;
-        border: 2px solid black;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        font-weight: bold;
-        text-align: center;
-        cursor: pointer;
-        user-select: none;
-        text-decoration: none;
-        color: black;"  onclick="goToPage('performence1')">수행실1</button>
-        <button style="
-        width: 150px;
-        height: 250px;
-        background-color: #D3D3D3;
-        border: 2px solid black;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        font-weight: bold;
-        text-align: center;
-        cursor: pointer;
-        user-select: none;
-        text-decoration: none;
-        color: black;"  onclick="goToPage('performence2')">수행실2</button>
-        <button style="
-        width: 150px;
-        height: 250px;
-        background-color: #D3D3D3;
-        border: 2px solid black;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        font-weight: bold;
-        text-align: center;
-        cursor: pointer;
-        user-select: none;
-        text-decoration: none;
-        color: black;"  onclick="goToPage('performence3')">수행실3</button>
-        <button style="
-        width: 150px;
-        height: 250px;
-        background-color: #D3D3D3;
-        border: 2px solid black;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-            justify-content: center;
-        font-size: 18px;
-        font-weight: bold;
-        text-align: center;
-        cursor: pointer;
-        user-select: none;
-        text-decoration: none;
-        color: black;"  onclick="goToPage('performence3')">수행실4</button>
-        <button style="
-        width: 150px;
-        height: 250px;
-        background-color: #D3D3D3;
-        border: 2px solid black;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        font-weight: bold;
-        text-align: center;
-        cursor: pointer;
-        user-select: none;
-        text-decoration: none;
-        color: black;"  onclick="goToPage('performence3')">수행실5</button>
+    <h2 class="main-text" style="display: flex; justify-content: center;">수행실실 선택</h2>
+    <div class="button-container">
+        <!-- 상단 행: 자습실 1, 2, 3 -->
+        <div class="button-row-top">
+            <button class="button top" onclick="goToPage('performance1')">
+                <span class="main-text">수행실 1</span>
+                <span class="sub-text">2-1</span>
+                <span class="info-text">00명 남음</span>
+            </button>
+            <button class="button top" onclick="goToPage('performance2')">
+                <span class="main-text">수행실 2</span>
+                <span class="sub-text">2-2</span>
+                <span class="info-text">00명 남음</span>
+            </button>
+            <button class="button top" onclick="goToPage('performance3')">
+                <span class="main-text">수행실 3</span>
+                <span class="sub-text">2-3</span>
+                <span class="info-text">00명 남음</span>
+            </button>
+        </div>
     </div>
-
     <script>
         function goToPage(page) {
-            window.location.href = "/PerformenceRoom/" + page;
+            window.location.href = "/StudyRoom/" + page;
         }
     </script>
 </body>
