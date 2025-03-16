@@ -4,3 +4,68 @@
     font-weight: bold;
     font-style: normal;
 }
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #ffffff;
+    gap: 20px; /* 입력 필드와 로그인 버튼 간 간격 */
+}
+
+#studentId {
+    display: flex;
+    justify-content: center;
+    width: 470px; /* 입력 필드 너비 */
+    height: 70px; /* 입력 필드 높이 */
+    border: 10px;
+    background-color: #F2F2F2; /* 흰색 배경 */
+    border: 3px solid #C2C2C2; /* 회색 테두리 */
+    border-radius: 5px; /* 둥근 모서리 */
+    padding: 0 10px; /* 좌우 패딩 */
+    font-size: 16px; /* 텍스트 크기 */
+    color: #000000; /* 텍스트 색상 */
+    box-sizing: border-box;
+}
+
+#studentId::placeholder {
+    color: #999999; /* 회색 placeholder 텍스트 */
+    font-size: 16px;
+}
+
+#studentId:focus {
+    outline: none;
+    border-color: #666666; /* 포커스 시 더 진한 회색 테두리 */
+}
+
+.login-button:hover {
+    background-color: #8AA7FA; /* 호버 시 약간 더 진한 파란색 */
+}
+
+.login-button:active {
+    background-color: #7B94E8; /* 클릭 시 더 진한 파란색 */
+}
+
+.login-button {
+    width: 470px;
+    height: 40px;
+    background-color: #A3BFFA; /* 연한 파란색 배경 */
+    border: none;
+    border-radius: 5px; /* 둥근 모서리 */
+    color: #FFFFFF; /* 흰색 텍스트 */
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    text-transform: uppercase; /* "LOGIN" 텍스트를 대문자로 */
+}
+
+.date-text {
+    font-size: 48px; /* 이미지의 텍스트 크기와 유사하게 */
+    color: #333333; /* 회색 텍스트 */
+    font-weight: bold; /* 굵은 텍스트 */
+    text-align: center;
+}

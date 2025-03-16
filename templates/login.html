@@ -3,15 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>로그인</title>
+    <link rel="stylesheet" href="/static/CSS/login.css">
     <script type="module" src="../static/firebase_config.js"></script>
     <script type="module" src="../static/login/login.js"></script>
 </head>
 <body>
-    <h2>학번 입력 후 로그인</h2>
+    <h2 class="date-text" id="dateDisplay" style="display: flex; justify-content: center;">00/00 야자 조사</h2>
     <input type="text" id="studentId" placeholder="학번 입력">
-    <button onclick="login()">로그인</button>
+    <button class="login-button" onclick="login()">LOGIN</button>
     <p id="error-message"></p>
     <!-- 🔥 추가: 출력 버튼 -->
+
+    <script>
+        // 현재 날짜를 가져와서 MM/DD 형식으로 변환
+        function updateDate() {
+            const now = new Date();
+            const month = String(now.getMonth() + 1).padStart(2, '0'); // 월 (0-11이므로 +1)
+            const day = String(now.getDate()).padStart(2, '0'); // 일
+            const dateText = `${month}/${day} CIP 조사`;
+            document.getElementById('dateDisplay').textContent = dateText;
+        }
+
+        // 페이지 로드 시 날짜 업데이트
+        window.onload = updateDate;
+    </script>
     
     <button onclick="window.location.href='/admin_print'">출력</button>
 </body>
