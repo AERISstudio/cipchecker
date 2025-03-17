@@ -121,6 +121,17 @@ def update_select():
         class_num = student_id[1:3]  # 🔥 학번에서 반 번호 추출 (예: 21008 → "10"반)
         file_name = f"{class_num}반.xlsx"
 
+        # 학번.csv 파일에서 이름 가져오기
+        name_file = "학번.csv"
+        if not os.path.exists(name_file):
+            return jsonify({"error": "❌ 이름 파일이 없습니다."}), 500
+
+        name_df = pd.read_csv(name_file)
+        if "학번" not in name_df.columns or "이름" not in name_df.columns:
+            return jsonify({"error": "❌ CSV 파일에 '학번' 또는 '이름' 열이 없습니다."}), 500
+
+        student_name = name_df.loc[name_df["학번"] == int(student_id), "이름"].values[0]
+
         data = request.get_json()
         if not data:
             return jsonify({"error": "❌ 전송된 JSON 데이터가 없습니다."}), 400
@@ -131,7 +142,7 @@ def update_select():
     
         # ✅ 엑셀 파일 존재 확인 및 생성
         if not os.path.exists(file_name):
-            df = pd.DataFrame(columns=["학번", "CIP2", "CIP3"])
+            df = pd.DataFrame(columns=["학번", "이름", "CIP2", "CIP3"])
             df.to_excel(file_name, index=False, engine="openpyxl")
 
         # ✅ 엑셀 파일 읽기 (오류 대비)
@@ -144,10 +155,10 @@ def update_select():
         # ✅ 학번이 없으면 추가, 있으면 수정
         df["학번"] = df["학번"].astype(str).fillna("")
         if student_id not in df["학번"].values:
-            new_data = pd.DataFrame([[student_id, cip2, cip3]], columns=["학번", "CIP2", "CIP3"])
+            new_data = pd.DataFrame([[student_id, student_name, cip2, cip3]], columns=["학번", "이름", "CIP2", "CIP3"])
             df = pd.concat([df, new_data], ignore_index=True)
         else:
-            df.loc[df["학번"] == student_id, ["CIP2", "CIP3"]] = [cip2, cip3]
+            df.loc[df["학번"] == student_id, ["이름", "CIP2", "CIP3"]] = [student_name, cip2, cip3]
 
         # ✅ 학번 정렬 (마지막 두 자리 기준, 예외 처리 포함)
         try:
@@ -176,9 +187,20 @@ def save_to_excel():
         class_num = student_id[1:3]  # 🔥 학번에서 반 번호 추출 (예: 21008 → "10"반)
         file_name = f"{class_num}반.xlsx"
 
+        # 학번.csv 파일에서 이름 가져오기
+        name_file = "학번.csv"
+        if not os.path.exists(name_file):
+            return jsonify({"error": "❌ 이름 파일이 없습니다."}), 500
+
+        name_df = pd.read_csv(name_file)
+        if "학번" not in name_df.columns or "이름" not in name_df.columns:
+            return jsonify({"error": "❌ CSV 파일에 '학번' 또는 '이름' 열이 없습니다."}), 500
+
+        student_name = name_df.loc[name_df["학번"] == int(student_id), "이름"].values[0]
+
         # ✅ 엑셀 파일 존재 확인 및 생성
         if not os.path.exists(file_name):
-            df = pd.DataFrame(columns=["학번", "CIP2", "CIP3"])
+            df = pd.DataFrame(columns=["학번", "이름", "CIP2", "CIP3"])
             df.to_excel(file_name, index=False, engine="openpyxl")
 
         # ✅ 엑셀 파일 읽기 (오류 대비)
@@ -191,15 +213,15 @@ def save_to_excel():
         # ✅ 학번이 없으면 추가, 있으면 수정
         df["학번"] = df["학번"].astype(str).fillna("")
         if student_id not in df["학번"].values:
-            new_data = pd.DataFrame([[student_id, "학원 자습", "학원 자습"]], columns=["학번", "CIP2", "CIP3"])
+            new_data = pd.DataFrame([[student_id, student_name, "학원 자습", "학원 자습"]], columns=["학번", "이름", "CIP2", "CIP3"])
             df = pd.concat([df, new_data], ignore_index=True)
         else:
-            df.loc[df["학번"] == student_id, ["CIP2", "CIP3"]] = ["학원 자습", "학원 자습"]
+            df.loc[df["학번"] == student_id, ["이름", "CIP2", "CIP3"]] = [student_name, "학원 자습", "학원 자습"]
 
         # ✅ 학번 정렬 (마지막 두 자리 기준, 예외 처리 포함)
         try:
             df["학번_번호"] = df["학번"].str[-2:].astype(int, errors="ignore")
-            df = df.sort_values(by="학번_번호").drop(columns=["학번_번호"])
+            df = df.sort_values(by="학번_번호").drop(columns=(["학번_번호"]))
         except Exception as e:
             print(f"⚠️ 학번 정렬 오류 발생: {e}")
 
