@@ -29,7 +29,7 @@
 
         // ✅ 현재 활동실1의 인원 수 가져오기
         async function updateRoomCapacity() {
-            const roomRef = ref(database, "rooms/활동실/활동실1");
+            const roomRef = ref(database, "rooms/활동실/활동실3");
             try {
                 const snapshot = await get(roomRef);
                 if (snapshot.exists()) {
@@ -50,11 +50,11 @@
             try {
                 // ✅ CIP 선택 확인
                 
-                const cip2 = document.getElementById("cip2").checked ? "활동실1" : "자습";
-                const cip3 = document.getElementById("cip3").checked ? "활동실1" : "자습";
+                const cip2 = document.getElementById("cip2").checked ? "활동실3" : "자습";
+                const cip3 = document.getElementById("cip3").checked ? "활동실3" : "자습";
 
-                // ✅ 현재 활동실1 인원 확인
-                const roomRef = ref(database, "rooms/활동실/활동실1");
+                // ✅ 현재 활동실3 인원 확인
+                const roomRef = ref(database, "rooms/활동실/활동실3");
                 const snapshot = await get(roomRef);
 
                 if (snapshot.exists()) {
@@ -63,7 +63,7 @@
                     let maxCapacity = roomData.max_capacity || 30;
 
                     if (currentCapacity >= maxCapacity) {
-                        alert("⚠️ 활동실1이(가) 이미 가득 찼습니다!");
+                        alert("⚠️ 활동실3이(가) 이미 가득 찼습니다!");
                         return;
                     }
 
