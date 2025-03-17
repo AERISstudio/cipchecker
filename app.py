@@ -5,6 +5,7 @@ import pandas as pd
 import os
 from datetime import timedelta, datetime
 import openpyxl
+from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
 
@@ -15,6 +16,25 @@ app.secret_key = os.urandom(24)  # 🔥 랜덤 보안 키 자동 생성
 # 🔥 Firebase 초기화 (Realtime Database 포함)
 cred = credentials.Certificate("dshs-cip-firebase-adminsdk-fbsvc-d04e1b4bf0.json")
 firebase_admin.initialize_app(cred, {"databaseURL": "https://dshs-cip-default-rtdb.firebaseio.com/"})
+
+# 🔥 APScheduler 설정
+scheduler = BackgroundScheduler()
+
+def delete_old_data():
+    try:
+        db.reference('login_times').delete()
+        rooms_ref = db.reference('rooms')
+        rooms_snapshot = rooms_ref.get()
+        if rooms_snapshot:
+            for room_id in rooms_snapshot:
+                rooms_ref.child(room_id).child('current_count').delete()
+        print("✅ 12시간마다 데이터 삭제 완료")
+    except Exception as e:
+        print(f"❌ 데이터 삭제 오류: {e}")
+
+# 12시간마다 delete_old_data 함수 실행
+scheduler.add_job(delete_old_data, 'interval', hours=12)
+scheduler.start()
 
 # ✅ 로그인 페이지
 @app.route("/", methods=["GET"])
