@@ -1,4 +1,3 @@
-<!-- filepath: c:\Users\admin\Documents\GitHub\cipchecker\templates\admin_print.html -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -46,21 +45,22 @@
         <button onclick="printPageClass()">🖨 반 인쇄</button>
     </div>
 
-    <!-- 방별 데이터 출력 -->
+    <!-- 방 및 엑셀 파일 데이터 출력 -->
     <div style="margin-top:20px;">
-        <label for="roomSelect">방 선택:</label>
+        <label for="roomSelect">방/엑셀 파일 선택:</label>
         <select id="roomSelect" onchange="loadRoomData()">
             <option value="자습실1">자습실1</option>
             <option value="자습실2">자습실2</option>
             <option value="자습실3">자습실3</option>
             <option value="자습실4">자습실4</option>
             <option value="자습실5">자습실5</option>
+            <option value="수행실1">수행실1</option>
+            <option value="수행실2">수행실2</option>
             <option value="활동실1">활동실1</option>
             <option value="활동실2">활동실2</option>
             <option value="활동실3">활동실3</option>
-            <!-- 필요시 더 추가 -->
         </select>
-        <button onclick="printPageRoom()">🖨 방 인쇄</button>
+        <button onclick="printPageRoom()">🖨 방/엑셀 파일 인쇄</button>
     </div>
 
     <div id="tableContainer" style="margin-top:20px;">
@@ -106,7 +106,7 @@
                 .catch(error => console.error("반 데이터 불러오기 실패:", error));
         }
 
-        // 방별 데이터 로드
+        // 방(및 엑셀 파일) 데이터 로드
         function loadRoomData() {
             let roomName = document.getElementById("roomSelect").value;
             fetch(`/get_room_data?room=${roomName}`)
