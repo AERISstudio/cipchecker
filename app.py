@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash, get_flashed_messages
 import firebase_admin
 from firebase_admin import credentials, auth, db
 import pandas as pd
 import os
-from datetime import timedelta
+from datetime import timedelta, datetime
 import openpyxl
 
 app = Flask(__name__)
@@ -27,12 +27,26 @@ def student_login():
     try:
         data = request.json
         if not data or "student_id" not in data:
-            return jsonify({"error": "❌ 학번을 입력하세요!"}), 400
+            flash("❌ 학번을 입력하세요!", "error")
+            return redirect(url_for("login_page"))
 
         student_id = data.get("student_id", "").strip()
 
         if not student_id.isdigit() or len(student_id) not in [5, 7]:
-            return jsonify({"error": "❌ 유효한 학번을 입력하세요!"}), 400
+            flash("❌ 유효한 학번을 입력하세요!", "error")
+            return redirect(url_for("login_page"))
+
+        # 🔥 로그인 시각 확인
+        ref = db.reference(f"login_times/{student_id}")
+        last_login_time = ref.get()
+        current_time = datetime.now()
+
+        if last_login_time:
+            last_login_time = datetime.strptime(last_login_time, "%Y-%m-%d %H:%M:%S")
+            time_diff = current_time - last_login_time
+            if time_diff.total_seconds() < 12 * 3600:
+                flash("이미 기록되었습니다. 수정이 필요할시 담당선생님께 찾아가세요", "error")
+                return redirect(url_for("login_page"))
 
         try:
             user = auth.get_user(student_id)
@@ -41,11 +55,16 @@ def student_login():
 
         custom_token = auth.create_custom_token(student_id)
         session["student_id"] = student_id
+
+        # 🔥 로그인 시각 저장
+        ref.set(current_time.strftime("%Y-%m-%d %H:%M:%S"))
+
         return jsonify({"token": custom_token.decode("utf-8"), "redirect": url_for("select")}), 200
 
     except Exception as e:
         print(f"❌ 로그인 오류: {e}")
-        return jsonify({"error": f"서버 오류 발생: {str(e)}"}), 500
+        flash(f"서버 오류 발생: {str(e)}", "error")
+        return redirect(url_for("login_page"))
 
 # ✅ 공간 선택 페이지
 @app.route("/select")
