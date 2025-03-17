@@ -29,6 +29,17 @@ def delete_old_data():
             for room_id in rooms_snapshot:
                 rooms_ref.child(room_id).child('current_count').delete()
         print("✅ 12시간마다 데이터 삭제 완료")
+        
+        allowed_files = [f"{i:02d}반.xlsx" for i in range(1, 11)]
+        for file in os.listdir("."):
+            if file.endswith(".xlsx"):
+                if file not in allowed_files:
+                    try:
+                        os.remove(file)
+                        print(f"✅ 삭제된 파일: {file}")
+                    except Exception as e:
+                        print(f"❌ 파일 삭제 오류 ({file}): {e}")
+                        
     except Exception as e:
         print(f"❌ 데이터 삭제 오류: {e}")
 
