@@ -330,6 +330,24 @@ def get_excel_data():
     except Exception as e:
         print(f"❌ 엑셀 데이터 로드 오류: {e}")
         return jsonify({"error": "엑셀 데이터 로드 중 오류 발생"}), 500
+    
+@app.route("/get_room_data")
+def get_room_data():
+    try:
+        roomName = request.args.get("room")
+        if not roomName:
+            return jsonify({"error": "방 이름이 잘못되었습니다."}), 400
+
+        file_name = f"{roomName}.xlsx"
+        if not os.path.exists(file_name):
+            return jsonify({"error": f"{roomName} 엑셀 파일이 없습니다."}), 404
+
+        df = pd.read_excel(file_name, engine="openpyxl")
+        return jsonify(df.to_dict(orient="records")), 200
+
+    except Exception as e:
+        print(f"❌ 방 엑셀 데이터 로드 오류: {e}")
+        return jsonify({"error": "방 엑셀 데이터 로드 중 오류가 발생했습니다."}), 500
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
