@@ -53,7 +53,7 @@
                 const cip3 = document.getElementById("cip3").checked ? "자습실3" : "자습";
 
                 // ✅ 현재 자습실1 인원 확인
-                const roomRef = ref(database, "rooms/자습실/자습실1");
+                const roomRef = ref(database, "rooms/자습실/자습실3");
                 const snapshot = await get(roomRef);
 
                 if (snapshot.exists()) {
@@ -62,7 +62,7 @@
                     let maxCapacity = roomData.max_capacity || 30;
 
                     if (currentCapacity >= maxCapacity) {
-                        alert("⚠️ 자습실1이(가) 이미 가득 찼습니다!");
+                        alert("⚠️ 자습실3이(가) 이미 가득 찼습니다!");
                         return;
                     }
 
