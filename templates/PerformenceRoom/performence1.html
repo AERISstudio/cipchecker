@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>수행실 선택 및 CIP 선택</title>
-    <link rel="'stylesheet" href="/static/CSS/cip.css">
+    <link rel="stylesheet" href="/static/CSS/cip.css">
     
     <!-- ✅ Firebase SDK 로드 -->
     <script type="module">
@@ -48,8 +48,7 @@
         // ✅ 수행실1 선택 + CIP 선택 통합 함수
         window.submitSelection = async function () {
             try {
-                // ✅ CIP 선택 확인
-                
+                // ✅ CIP 선택 확인 (체크되면 "수행실1", 아니면 기본값 "자습")
                 const cip2 = document.getElementById("cip2").checked ? "수행실1" : "자습";
                 const cip3 = document.getElementById("cip3").checked ? "수행실1" : "자습";
 
@@ -70,11 +69,11 @@
                     // 🔥 Firebase 인원 업데이트
                     await update(roomRef, { current_capacity: currentCapacity + 1 });
 
-                    // 🔥 Flask 서버에 CIP 선택 정보 전송
+                    // 🔥 Flask 서버에 CIP 선택 정보 전송 (selected_room: "수행실1")
                     const response = await fetch("/update_select", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ cip2, cip3 })
+                        body: JSON.stringify({ selected_room: "수행실1", cip2, cip3 })
                     });
 
                     const data = await response.json();
@@ -97,12 +96,13 @@
     </script>
 </head>
 <body>
-    <h2 style="display: flex; justify-content: center; font-family: 'g'">CIP 선택</h2>
-    <span  style="display: flex; justify-content: center;" id="roomCapacity">현재 인원: 불러오는 중...</span>
+    <h2 style="display: flex; justify-content: center;">CIP 선택</h2>
+    <span style="display: flex; justify-content: center;" id="roomCapacity">현재 인원: 불러오는 중...</span>
     <label class="text-center" style="display: flex; justify-content: center; position: relative;">
         <input type="checkbox" id="cip2">
         <img id="img-cip2" src="/static/Image/On.png">
-        <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #6c6c6c; font-size: 20px; font-weight: bold;">
+        <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                     color: #6c6c6c; font-size: 20px; font-weight: bold;">
             CIP 2차
         </span>
     </label>
@@ -110,14 +110,15 @@
     <label style="display: flex; justify-content: center; position: relative;">
         <input type="checkbox" id="cip3">
         <img id="img-cip3" src="/static/Image/On.png">
-        <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #6c6c6c; font-size: 20px; font-weight: bold;">
+        <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                     color: #6c6c6c; font-size: 20px; font-weight: bold;">
             CIP 3차
         </span>
     </label>
     
     <br/>
     <div style="display: flex; justify-content: center;">
-        <button id="submitBtn" style="box-shadow: none; border: none; background-color: rgba(240, 248, 255, 0);" onclick="submitSelection()" disabled>
+        <button id="submitBtn" style="box-shadow: none; border: none; background-color: transparent;" onclick="submitSelection()" disabled>
             <img id="btn-img" src="/static/Image/Component 2.png">
         </button>
     </div>
@@ -130,11 +131,11 @@
             const btnImg = document.getElementById('btn-img');
     
             if (cip2Checked || cip3Checked) {
-                btnImg.src = '/static/Image/CP2x.png'; // 체크되면 버튼 이미지 변경
-                button.disabled = false; // 버튼 활성화
+                btnImg.src = '/static/Image/CP2x.png';
+                button.disabled = false;
             } else {
-                btnImg.src = '/static/Image/Component 2.png'; // 체크 해제되면 원래 이미지
-                button.disabled = true; // 버튼 비활성화
+                btnImg.src = '/static/Image/Component 2.png';
+                button.disabled = true;
             }
         }
     
@@ -147,10 +148,6 @@
             document.getElementById('img-cip3').src = this.checked ? '/static/Image/Off.png' : '/static/Image/On.png';
             updateButtonState();
         });
-    
-        function submitSelection() {
-            alert("제출 완료!");
-        }
     </script>
 </body>
 </html>

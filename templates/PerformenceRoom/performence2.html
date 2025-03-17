@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>수행실 선택 및 CIP 선택</title>
-    <link rel="'stylesheet" href="/static/CSS/cip.css">
+    <link rel="stylesheet" href="/static/CSS/cip.css">
     
     <!-- ✅ Firebase SDK 로드 -->
     <script type="module">
@@ -27,7 +27,7 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // ✅ 현재 수행실1의 인원 수 가져오기
+        // ✅ 현재 수행실2의 인원 수 가져오기
         async function updateRoomCapacity() {
             const roomRef = ref(database, "rooms/수행실/수행실2");
             try {
@@ -48,7 +48,7 @@
         // ✅ 수행실2 선택 + CIP 선택 통합 함수
         window.submitSelection = async function () {
             try {
-                // ✅ CIP 선택 확인
+                // ✅ CIP 선택 확인 (체크되면 "수행실2", 아니면 기본값 "자습")
                 const cip2 = document.getElementById("cip2").checked ? "수행실2" : "자습";
                 const cip3 = document.getElementById("cip3").checked ? "수행실2" : "자습";
 
@@ -62,18 +62,18 @@
                     let maxCapacity = roomData.max_capacity || 30;
 
                     if (currentCapacity >= maxCapacity) {
-                        alert("⚠️ 수행실1이(가) 이미 가득 찼습니다!");
+                        alert("⚠️ 수행실2이(가) 이미 가득 찼습니다!");
                         return;
                     }
 
                     // 🔥 Firebase 인원 업데이트
                     await update(roomRef, { current_capacity: currentCapacity + 1 });
 
-                    // 🔥 Flask 서버에 CIP 선택 정보 전송
+                    // 🔥 Flask 서버에 CIP 선택 정보 전송 (selected_room: "수행실2")
                     const response = await fetch("/update_select", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ cip2, cip3 })
+                        body: JSON.stringify({ selected_room: "수행실2", cip2, cip3 })
                     });
 
                     const data = await response.json();
@@ -96,8 +96,8 @@
     </script>
 </head>
 <body>
-    <h2 style="display: flex; justify-content: center; ">CIP 선택</h2>
-    <span  style="display: flex; justify-content: center;" id="roomCapacity">현재 인원: 불러오는 중...</span>
+    <h2 style="display: flex; justify-content: center;">CIP 선택</h2>
+    <span style="display: flex; justify-content: center;" id="roomCapacity">현재 인원: 불러오는 중...</span>
     <label class="text-center" style="display: flex; justify-content: center; position: relative;">
         <input type="checkbox" id="cip2">
         <img id="img-cip2" src="/static/Image/On.png">
@@ -127,7 +127,7 @@
             const cip3Checked = document.getElementById('cip3').checked;
             const button = document.getElementById('submitBtn');
             const btnImg = document.getElementById('btn-img');
-    
+
             if (cip2Checked || cip3Checked) {
                 btnImg.src = '/static/Image/CP2x.png'; // 체크되면 버튼 이미지 변경
                 button.disabled = false; // 버튼 활성화
@@ -136,20 +136,16 @@
                 button.disabled = true; // 버튼 비활성화
             }
         }
-    
+
         document.getElementById('cip2').addEventListener('change', function () {
             document.getElementById('img-cip2').src = this.checked ? '/static/Image/Off.png' : '/static/Image/On.png';
             updateButtonState();
         });
-    
+
         document.getElementById('cip3').addEventListener('change', function () {
             document.getElementById('img-cip3').src = this.checked ? '/static/Image/Off.png' : '/static/Image/On.png';
             updateButtonState();
         });
-    
-        function submitSelection() {
-            alert("제출 완료!");
-        }
     </script>
 </body>
 </html>

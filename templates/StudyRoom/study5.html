@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>자습실 선택 및 CIP 선택</title>
-    <link rel="'stylesheet" href="/static/CSS/cip.css">
+    <link rel="stylesheet" href="/static/CSS/cip.css">
     
     <!-- ✅ Firebase SDK 로드 -->
     <script type="module">
@@ -27,7 +27,7 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // ✅ 현재 자습실1의 인원 수 가져오기
+        // ✅ 현재 자습실5의 인원 수 가져오기
         async function updateRoomCapacity() {
             const roomRef = ref(database, "rooms/자습실/자습실5");
             try {
@@ -45,14 +45,14 @@
             }
         }
 
-        // ✅ 자습실1 선택 + CIP 선택 통합 함수
+        // ✅ 자습실5 선택 + CIP 선택 통합 함수
         window.submitSelection = async function () {
             try {
-                // ✅ CIP 선택 확인
+                // ✅ CIP 선택 확인 (체크되면 "자습실5", 아니면 기본값 "자습")
                 const cip2 = document.getElementById("cip2").checked ? "자습실5" : "자습";
                 const cip3 = document.getElementById("cip3").checked ? "자습실5" : "자습";
 
-                // ✅ 현재 자습실1 인원 확인
+                // ✅ 현재 자습실5 인원 확인
                 const roomRef = ref(database, "rooms/자습실/자습실5");
                 const snapshot = await get(roomRef);
 
@@ -69,11 +69,11 @@
                     // 🔥 Firebase 인원 업데이트
                     await update(roomRef, { current_capacity: currentCapacity + 1 });
 
-                    // 🔥 Flask 서버에 CIP 선택 정보 전송
+                    // 🔥 Flask 서버에 CIP 선택 정보 전송 (selected_room: "자습실5")
                     const response = await fetch("/update_select", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ cip2, cip3 })
+                        body: JSON.stringify({ selected_room: "자습실5", cip2, cip3 })
                     });
 
                     const data = await response.json();
@@ -96,12 +96,13 @@
     </script>
 </head>
 <body>
-    <h2 style="display: flex; justify-content: center; ">CIP 선택</h2>
-    <span  style="display: flex; justify-content: center;" id="roomCapacity">현재 인원: 불러오는 중...</span>
+    <h2 style="display: flex; justify-content: center;">CIP 선택</h2>
+    <span style="display: flex; justify-content: center;" id="roomCapacity">현재 인원: 불러오는 중...</span>
     <label class="text-center" style="display: flex; justify-content: center; position: relative;">
         <input type="checkbox" id="cip2">
         <img id="img-cip2" src="/static/Image/On.png">
-        <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #6c6c6c; font-size: 20px; font-weight: bold;">
+        <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                     color: #6c6c6c; font-size: 20px; font-weight: bold;">
             CIP 2차
         </span>
     </label>
@@ -109,7 +110,8 @@
     <label style="display: flex; justify-content: center; position: relative;">
         <input type="checkbox" id="cip3">
         <img id="img-cip3" src="/static/Image/On.png">
-        <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #6c6c6c; font-size: 20px; font-weight: bold;">
+        <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                     color: #6c6c6c; font-size: 20px; font-weight: bold;">
             CIP 3차
         </span>
     </label>
@@ -146,10 +148,6 @@
             document.getElementById('img-cip3').src = this.checked ? '/static/Image/Off.png' : '/static/Image/On.png';
             updateButtonState();
         });
-    
-        function submitSelection() {
-            alert("제출 완료!");
-        }
     </script>
 </body>
 </html>

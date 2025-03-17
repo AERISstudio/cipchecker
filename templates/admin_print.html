@@ -1,9 +1,10 @@
+<!-- filepath: c:\Users\admin\Documents\GitHub\cipchecker\templates\admin_print.html -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>반별 엑셀 데이터 출력</title>
+    <title>엑셀 데이터 출력</title>
     <style>
         table {
             width: 100%;
@@ -19,31 +20,50 @@
         /* 인쇄 시 스타일 */
         @media print {
             button, select {
-                display: none; /* 인쇄할 때 버튼과 드롭다운 숨김 */
+                display: none;
             }
         }
     </style>
 </head>
 <body>
-    <h1>반별 엑셀 데이터 출력</h1>
-    
-    <label for="classSelect">반 선택:</label>
-    <select id="classSelect" onchange="loadExcelData()">
-        <option value="1">1반</option>
-        <option value="2">2반</option>
-        <option value="3">3반</option>
-        <option value="4">4반</option>
-        <option value="5">5반</option>
-        <option value="6">6반</option>
-        <option value="7">7반</option>
-        <option value="8">8반</option>
-        <option value="9">9반</option>
-        <option value="10" selected>10반</option>
-    </select>
+    <h1>엑셀 데이터 출력</h1>
 
-    <button onclick="printPage()">🖨 인쇄</button>
+    <!-- 반별 데이터 출력 -->
+    <div>
+        <label for="classSelect">반 선택:</label>
+        <select id="classSelect" onchange="loadExcelData()">
+            <option value="1">1반</option>
+            <option value="2">2반</option>
+            <option value="3">3반</option>
+            <option value="4">4반</option>
+            <option value="5">5반</option>
+            <option value="6">6반</option>
+            <option value="7">7반</option>
+            <option value="8">8반</option>
+            <option value="9">9반</option>
+            <option value="10" selected>10반</option>
+        </select>
+        <button onclick="printPageClass()">🖨 반 인쇄</button>
+    </div>
 
-    <div id="tableContainer">
+    <!-- 방별 데이터 출력 -->
+    <div style="margin-top:20px;">
+        <label for="roomSelect">방 선택:</label>
+        <select id="roomSelect" onchange="loadRoomData()">
+            <option value="자습실1">자습실1</option>
+            <option value="자습실2">자습실2</option>
+            <option value="자습실3">자습실3</option>
+            <option value="자습실4">자습실4</option>
+            <option value="자습실5">자습실5</option>
+            <option value="활동실1">활동실1</option>
+            <option value="활동실2">활동실2</option>
+            <option value="활동실3">활동실3</option>
+            <!-- 필요시 더 추가 -->
+        </select>
+        <button onclick="printPageRoom()">🖨 방 인쇄</button>
+    </div>
+
+    <div id="tableContainer" style="margin-top:20px;">
         <table id="excelTable">
             <thead>
                 <tr>
@@ -54,26 +74,24 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- 데이터가 여기에 동적으로 추가됨 -->
+                <!-- 데이터가 동적으로 추가됨 -->
             </tbody>
         </table>
     </div>
 
     <script>
+        // 반별 데이터 로드
         function loadExcelData() {
             let classNum = document.getElementById("classSelect").value;
-
             fetch(`/get_excel_data?class=${classNum}`)
                 .then(response => response.json())
                 .then(data => {
                     let tableBody = document.querySelector("#excelTable tbody");
-                    tableBody.innerHTML = "";  // 기존 데이터 초기화
-
+                    tableBody.innerHTML = "";
                     if (data.error) {
                         tableBody.innerHTML = `<tr><td colspan="4">${data.error}</td></tr>`;
                         return;
                     }
-
                     data.forEach(row => {
                         let tr = document.createElement("tr");
                         tr.innerHTML = `
@@ -85,17 +103,50 @@
                         tableBody.appendChild(tr);
                     });
                 })
-                .catch(error => console.error("데이터 불러오기 실패:", error));
+                .catch(error => console.error("반 데이터 불러오기 실패:", error));
         }
 
-        function printPage() {
-            loadExcelData();  // 데이터 로드 후 인쇄
+        // 방별 데이터 로드
+        function loadRoomData() {
+            let roomName = document.getElementById("roomSelect").value;
+            fetch(`/get_room_data?room=${roomName}`)
+                .then(response => response.json())
+                .then(data => {
+                    let tableBody = document.querySelector("#excelTable tbody");
+                    tableBody.innerHTML = "";
+                    if (data.error) {
+                        tableBody.innerHTML = `<tr><td colspan="4">${data.error}</td></tr>`;
+                        return;
+                    }
+                    data.forEach(row => {
+                        let tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td>${row.학번}</td>
+                            <td>${row.이름}</td>
+                            <td>${row.CIP2}</td>
+                            <td>${row.CIP3}</td>
+                        `;
+                        tableBody.appendChild(tr);
+                    });
+                })
+                .catch(error => console.error("방 데이터 불러오기 실패:", error));
+        }
+
+        function printPageClass() {
+            loadExcelData();
             setTimeout(() => {
                 window.print();
-            }, 1000); // 1초 대기 후 인쇄 (데이터 로드 보장)
+            }, 1000);
         }
 
-        // 페이지 로드 시 10반 데이터 기본 출력
+        function printPageRoom() {
+            loadRoomData();
+            setTimeout(() => {
+                window.print();
+            }, 1000);
+        }
+
+        // 페이지 로드시 기본으로 10반 데이터 로드
         document.addEventListener("DOMContentLoaded", loadExcelData);
     </script>
 </body>

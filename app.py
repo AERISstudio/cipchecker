@@ -157,8 +157,8 @@ def update_select():
             return jsonify({"error": "❌ 로그인 후 이용하세요!"}), 403
 
         student_id = session["student_id"]
-        class_num = student_id[1:3]  # 🔥 학번에서 반 번호 추출 (예: 21008 → "10"반)
-        file_name = f"{class_num}반.xlsx"
+        class_num = student_id[1:3]  # 예: 21008 → "10"반
+        file_name = f"{class_num}반.xlsx"  # 이미 만들어진 파일이어야 함
 
         # 학번.csv 파일에서 이름 가져오기
         name_file = "학번.csv"
@@ -175,39 +175,63 @@ def update_select():
         if not data:
             return jsonify({"error": "❌ 전송된 JSON 데이터가 없습니다."}), 400
 
+        # selected_room 값 처리
         selected_room = data.get("selected_room")
+        if selected_room is None or str(selected_room).strip() == "":
+            return jsonify({"error": "❌ 방이 선택되지 않았습니다."}), 400
+        selected_room = str(selected_room).strip()
+
         cip2 = data.get("cip2", "자습")
         cip3 = data.get("cip3", "자습")
     
-        # ✅ 엑셀 파일 존재 확인 및 생성
+        # [1] 기존 반별 엑셀 파일 업데이트 (미리 만들어진 파일이어야 함)
         if not os.path.exists(file_name):
-            df = pd.DataFrame(columns=["학번", "이름", "CIP2", "CIP3"])
-            df.to_excel(file_name, index=False, engine="openpyxl")
+            return jsonify({"error": f"❌ {file_name} 파일이 존재하지 않습니다."}), 400
 
-        # ✅ 엑셀 파일 읽기 (오류 대비)
         try:
             df = pd.read_excel(file_name, engine="openpyxl")
         except Exception as e:
             print(f"❌ 엑셀 파일 로드 오류: {e}")
             return jsonify({"error": "엑셀 파일을 불러오는 중 오류 발생"}), 500
 
-        # ✅ 학번이 없으면 추가, 있으면 수정
         df["학번"] = df["학번"].astype(str).fillna("")
         if student_id not in df["학번"].values:
-            new_data = pd.DataFrame([[student_id, student_name, cip2, cip3]], columns=["학번", "이름", "CIP2", "CIP3"])
+            new_data = pd.DataFrame([[student_id, student_name, cip2, cip3]],
+                                    columns=["학번", "이름", "CIP2", "CIP3"])
             df = pd.concat([df, new_data], ignore_index=True)
         else:
             df.loc[df["학번"] == student_id, ["이름", "CIP2", "CIP3"]] = [student_name, cip2, cip3]
 
-        # ✅ 학번 정렬 (마지막 두 자리 기준, 예외 처리 포함)
         try:
             df["학번_번호"] = df["학번"].str[-2:].astype(int, errors="ignore")
             df = df.sort_values(by="학번_번호").drop(columns=["학번_번호"])
         except Exception as e:
             print(f"⚠️ 학번 정렬 오류 발생: {e}")
 
-        # ✅ 엑셀 저장
         df.to_excel(file_name, index=False, engine="openpyxl")
+    
+        # [2] 선택된 방에 해당하는 엑셀 파일 업데이트 (미리 만들어진 파일 사용)
+        room_file_name = f"{selected_room}.xlsx"
+        # 만약 파일이 없다면 자동으로 빈 파일을 생성
+        if not os.path.exists(room_file_name):
+            room_df = pd.DataFrame(columns=["학번", "이름", "CIP2", "CIP3"])
+            room_df.to_excel(room_file_name, index=False, engine="openpyxl")
+    
+        try:
+            room_df = pd.read_excel(room_file_name, engine="openpyxl")
+        except Exception as e:
+            print(f"❌ 방별 엑셀 파일 로드 오류: {e}")
+            return jsonify({"error": "방별 엑셀 파일을 불러오는 중 오류 발생"}), 500
+
+        room_df["학번"] = room_df["학번"].astype(str).fillna("")
+        if student_id not in room_df["학번"].values:
+            new_room_data = pd.DataFrame([[student_id, student_name, cip2, cip3]],
+                                         columns=["학번", "이름", "CIP2", "CIP3"])
+            room_df = pd.concat([room_df, new_room_data], ignore_index=True)
+        else:
+            room_df.loc[room_df["학번"] == student_id, ["이름", "CIP2", "CIP3"]] = [student_name, cip2, cip3]
+
+        room_df.to_excel(room_file_name, index=False, engine="openpyxl")
     
         return jsonify({"message": "✅ 자습실 선택이 저장되었습니다."}), 200
 
