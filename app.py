@@ -175,6 +175,11 @@ def update_select():
         if not data:
             return jsonify({"error": "❌ 전송된 JSON 데이터가 없습니다."}), 400
 
+
+
+
+
+
         selected_room = data.get("selected_room")
         cip2 = data.get("cip2", "자습")
         cip3 = data.get("cip3", "자습")
@@ -282,6 +287,7 @@ def admin_print():
 def get_excel_data():
     try:
         class_num = request.args.get("class")
+        room_filter = request.args.get("room")
         formatted_class_num = f"{int(class_num):02d}"
 
         file_name = f"{formatted_class_num}반.xlsx"
