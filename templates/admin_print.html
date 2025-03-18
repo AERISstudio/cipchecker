@@ -29,7 +29,6 @@
     <h1>엑셀 데이터 출력</h1>
 
 
-
     <!-- 방별 데이터 출력 -->
     <div style="margin-top:20px;">
         <label for="roomSelect">방 선택:</label>
@@ -42,9 +41,8 @@
             <option value="활동실1">활동실1</option>
             <option value="활동실2">활동실2</option>
             <option value="활동실3">활동실3</option>
-            <option value="활동실3">수행실1</option>
-            <option value="활동실3">수행실2</option>
-            <!-- 필요시 더 추가 -->
+            <option value="수행실1">수행실1</option>
+            <option value="수행실2">수행실2</option>
         </select>
         <button onclick="printPageRoom()">🖨 방 인쇄</button>
     </div>
@@ -91,7 +89,7 @@
                 })
                 .catch(error => console.error("반 데이터 불러오기 실패:", error));
         }
-
+  
         // 방별 데이터 로드
         function loadRoomData() {
             let roomName = document.getElementById("roomSelect").value;
@@ -132,7 +130,7 @@
             }, 1000);
         }
 
-        // 페이지 로드시 기본으로 10반 데이터 로드
+        // 페이지 로드시 기본으로 10반 데이터를 로드합니다.
         document.addEventListener("DOMContentLoaded", loadExcelData);
     </script>
 </body>
