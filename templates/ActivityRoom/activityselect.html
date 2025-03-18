@@ -10,23 +10,75 @@
     <div class="button-container">
         <!-- 상단 행: 자습실 1, 2, 3 -->
         <div class="button-row-bottom">
-            <button class="button top" onclick="goToPage('activity1')">
+            <button id="activity1" class="button top" onclick="goToPage('activity1')">
                 <span class="main-text">활동실 1</span>
                 <span class="sub-text">2-3</span>
                 <span class="info-text">00명 남음</span>
             </button>
-            <button class="button top" onclick="goToPage('activity2')">
+            <button id="activity2" class="button top" onclick="goToPage('activity2')">
                 <span class="main-text">활동실 2</span>
                 <span class="sub-text">2-4</span>
                 <span class="info-text">00명 남음</span>
             </button>
-            <button class="button top" onclick="goToPage('activity3')">
+            <button id="activity3" class="button top" onclick="goToPage('activity3')">
                 <span class="main-text">활동실 3</span>
                 <span class="sub-text">2-5</span>
                 <span class="info-text">00명 남음</span>
             </button>
         </div>
     </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+    
+        // Firebase 설정 (각 activity 파일에서 사용한 설정과 동일하게 사용)
+        const firebaseConfig = {
+          apiKey: "AIzaSyCno_36Bl-DqjEk12lmFranNylngoo8Sd8",
+          authDomain: "dshs-cip.firebaseapp.com",
+          databaseURL: "https://dshs-cip-default-rtdb.firebaseio.com", 
+          projectId: "dshs-cip",
+          storageBucket: "dshs-cip.appspot.com",
+          messagingSenderId: "1033758614768",
+          appId: "1:1033758614768:web:6cc73592e6b9052fdfd4e35",
+          measurementId: "G-V8X4BKESWM"
+        };
+    
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+    
+        // 각 활동실의 정보를 불러와 남은 좌석(또는 남은 인원 수) 계산 후 업데이트
+        async function updateRoomInfo(roomNumber) {
+          const roomRef = ref(database, "rooms/활동실/활동실" + roomNumber);
+          try {
+            const snapshot = await get(roomRef);
+            if (snapshot.exists()) {
+              const roomData = snapshot.val();
+              const currentCapacity = roomData.current_capacity ?? 0;
+              const maxCapacity = roomData.max_capacity || 30;
+              const remaining = maxCapacity - currentCapacity;
+              document.querySelector(`#activity${roomNumber} .info-text`).innerText = `${remaining}명 남음`;
+            } else {
+              document.querySelector(`#activity${roomNumber} .info-text`).innerText = `정보 없음`;
+            }
+          } catch (error) {
+            console.error(`활동실${roomNumber} 데이터 조회 오류:`, error);
+            document.querySelector(`#activity${roomNumber} .info-text`).innerText = `오류 발생`;
+          }
+        }
+    
+        // 페이지 로딩 시 각 활동실 정보를 업데이트
+        window.onload = function() {
+          updateRoomInfo(1);
+          updateRoomInfo(2);
+          updateRoomInfo(3);
+        }
+    
+        // 페이지 이동 함수 (기존 코드 유지)
+        function goToPage(page) {
+          window.location.href = "/ActivityRoom/" + page;
+        }
+      </script>
     <script>
         function goToPage(page) {
             window.location.href = "/ActivityRoom/" + page;
