@@ -87,9 +87,10 @@
             updateRoomInfo(5);
         };
 
-        function goToPage(page) {
+        // StudyRoom 페이지로 이동하도록 수정
+        window.goToPage = function(page) {
             window.location.href = "/StudyRoom/" + page;
-        }
+        };
     </script>
 </body>
 </html>
