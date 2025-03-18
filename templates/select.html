@@ -22,12 +22,24 @@
         </button>
     </div>
 
+
     <script>
         function goToPage(page) {
             window.location.href = "./" + page;
         }
 
         function saveToExcel(page) {
+            if (page === 'academy') {
+                // confirm 팝업: 사용자가 "확인"을 누르면 true, "취소"를 누르면 false 반환
+                if (confirm("진짜로 학원에 가시겠습니까?")) {
+                    performSaveToExcel(page);
+                }
+            } else {
+                performSaveToExcel(page);
+            }
+        }
+
+        function performSaveToExcel(page) {
             fetch('/save_to_excel', {
                 method: 'POST',
                 headers: {
