@@ -10,17 +10,17 @@
     <div class="button-container">
         <!-- 상단 행: 자습실 1, 2, 3 -->
         <div class="button-row-top">
-            <button class="button top" onclick="goToPage('study1')">
+            <button id="study1" class="button top" onclick="goToPage('study1')">
                 <span class="main-text">자습실 1</span>
                 <span class="sub-text">2-6</span>
                 <span class="info-text">00명 남음</span>
             </button>
-            <button class="button top" onclick="goToPage('study2')">
+            <button id="study2" class="button top" onclick="goToPage('study2')">
                 <span class="main-text">자습실 2</span>
                 <span class="sub-text">2-7</span>
                 <span class="info-text">00명 남음</span>
             </button>
-            <button class="button top" onclick="goToPage('study3')">
+            <button id="study3" class="button top" onclick="goToPage('study3')">
                 <span class="main-text">자습실 3</span>
                 <span class="sub-text">2-8</span>
                 <span class="info-text">00명 남음</span>
@@ -28,19 +28,65 @@
         </div>
         <!-- 하단 행: 자습실 4, 5 -->
         <div class="button-row-bottom">
-            <button class="button bottom" onclick="goToPage('study4')">
+            <button id="study4" class="button bottom" onclick="goToPage('study4')">
                 <span class="main-text">자습실 4</span>
                 <span class="sub-text">2-9</span>
                 <span class="info-text">00명 남음</span>
             </button>
-            <button class="button bottom" onclick="goToPage('study5')">
+            <button id="study5" class="button bottom" onclick="goToPage('study5')">
                 <span class="main-text">자습실 5</span>
                 <span class="sub-text">2-10</span>
                 <span class="info-text">00명 남음</span>
             </button>
         </div>
     </div>
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+
+        // Firebase 설정 (활동실과 동일한 설정 사용)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCno_36Bl-DqjEk12lmFranNylngoo8Sd8",
+            authDomain: "dshs-cip.firebaseapp.com",
+            databaseURL: "https://dshs-cip-default-rtdb.firebaseio.com",
+            projectId: "dshs-cip",
+            storageBucket: "dshs-cip.appspot.com",
+            messagingSenderId: "1033758614768",
+            appId: "1:1033758614768:web:6cc73592e6b9052fdfd4e35",
+            measurementId: "G-V8X4BKESWM"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // 각 자습실의 정보를 조회하여 남은 인원(또는 좌석) 업데이트
+        async function updateRoomInfo(roomNumber) {
+            const roomRef = ref(database, "rooms/자습실/자습실" + roomNumber);
+            try {
+                const snapshot = await get(roomRef);
+                if (snapshot.exists()) {
+                    const roomData = snapshot.val();
+                    const currentCapacity = roomData.current_capacity ?? 0;
+                    const maxCapacity = roomData.max_capacity || 30;
+                    const remaining = maxCapacity - currentCapacity;
+                    document.querySelector(`#study${roomNumber} .info-text`).innerText = `${remaining}명 남음`;
+                } else {
+                    document.querySelector(`#study${roomNumber} .info-text`).innerText = "정보 없음";
+                }
+            } catch (error) {
+                console.error(`자습실${roomNumber} 데이터 조회 오류:`, error);
+                document.querySelector(`#study${roomNumber} .info-text`).innerText = "오류 발생";
+            }
+        }
+
+        window.onload = function() {
+            updateRoomInfo(1);
+            updateRoomInfo(2);
+            updateRoomInfo(3);
+            updateRoomInfo(4);
+            updateRoomInfo(5);
+        };
+
         function goToPage(page) {
             window.location.href = "/StudyRoom/" + page;
         }

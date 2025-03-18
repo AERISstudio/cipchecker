@@ -10,18 +10,61 @@
     <div class="button-container">
         <!-- 상단 행: 자습실 1, 2, 3 -->
         <div class="button-row-top">
-            <button class="button top" onclick="goToPage('performence1')">
+            <button id="performence1" class="button top" onclick="goToPage('performence1')">
                 <span class="main-text">수행실 1</span>
                 <span class="sub-text">2-1</span>
                 <span class="info-text">00명 남음</span>
             </button>
-            <button class="button top" onclick="goToPage('performence2')">
+            <button id="performence2" class="button top" onclick="goToPage('performence2')">
                 <span class="main-text">수행실 2</span>
                 <span class="sub-text">2-2</span>
                 <span class="info-text">00명 남음</span>
         </div>
     </div>
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+
+        // Firebase 설정 (다른 페이지와 동일한 설정 사용)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCno_36Bl-DqjEk12lmFranNylngoo8Sd8",
+            authDomain: "dshs-cip.firebaseapp.com",
+            databaseURL: "https://dshs-cip-default-rtdb.firebaseio.com",
+            projectId: "dshs-cip",
+            storageBucket: "dshs-cip.appspot.com",
+            messagingSenderId: "1033758614768",
+            appId: "1:1033758614768:web:6cc73592e6b9052fdfd4e35",
+            measurementId: "G-V8X4BKESWM"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // 각 수행실의 정보를 조회해 남은 인원 업데이트
+        async function updateRoomInfo(roomNumber) {
+            const roomRef = ref(database, "rooms/수행실/수행실" + roomNumber);
+            try {
+                const snapshot = await get(roomRef);
+                if (snapshot.exists()) {
+                    const roomData = snapshot.val();
+                    const currentCapacity = roomData.current_capacity ?? 0;
+                    const maxCapacity = roomData.max_capacity || 30;
+                    const remaining = maxCapacity - currentCapacity;
+                    document.querySelector(`#performence${roomNumber} .info-text`).innerText = `${remaining}명 남음`;
+                } else {
+                    document.querySelector(`#performence${roomNumber} .info-text`).innerText = "정보 없음";
+                }
+            } catch (error) {
+                console.error(`수행실${roomNumber} 데이터 조회 오류:`, error);
+                document.querySelector(`#performence${roomNumber} .info-text`).innerText = "오류 발생";
+            }
+        }
+
+        window.onload = function() {
+            updateRoomInfo(1);
+            updateRoomInfo(2);
+        };
+
         function goToPage(page) {
             window.location.href = "/PerformenceRoom/" + page;
         }
