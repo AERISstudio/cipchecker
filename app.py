@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 import firebase_admin
 from firebase_admin import credentials, auth, db
 import pandas as pd
+from flask_session import Session
 import os
 from datetime import timedelta, datetime
 import openpyxl
@@ -11,7 +12,10 @@ app = Flask(__name__)
 
 # ✅ Flask 세션 설정 (3시간 유지)
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=3)
-app.secret_key = os.urandom(24)  # 🔥 랜덤 보안 키 자동 생성
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "Fl@skS3cr3t#2025!")
+app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_PERMANENT"] = True
+Session(app)
 
 # 🔥 Firebase 초기화 (Realtime Database 포함)
 cred = credentials.Certificate("dshs-cip-firebase-adminsdk-fbsvc-d04e1b4bf0.json")
@@ -334,8 +338,6 @@ def get_room_data():
     except Exception as e:
         print(f"❌ 방 데이터 로드 오류: {e}")
         return jsonify({"error": "방 데이터 로드 중 오류 발생"}), 500
-    
-    
 
 if __name__ == "__main__":  
     app.run(host='0.0.0.0', port=5000)
